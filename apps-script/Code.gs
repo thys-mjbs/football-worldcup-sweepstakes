@@ -266,24 +266,71 @@ function seedTeamPool() {
     throw new Error("TeamPool already has data. Clear rows 2 onwards before re-seeding.");
   }
 
-  var pairs = [];
-  for (var set = 0; set < 2; set++) {
-    var sStrong = shuffleArray(STRONG_TEAMS.slice());
-    var sWeak   = shuffleArray(WEAK_TEAMS.slice());
-    for (var i = 0; i < sStrong.length; i++) {
-      pairs.push([sStrong[i], sWeak[i]]);
-    }
-  }
-  for (var k = 0; k < 12; k++) {
-    var si = Math.floor(Math.random() * STRONG_TEAMS.length);
-    var wi = Math.floor(Math.random() * WEAK_TEAMS.length);
-    pairs.push([STRONG_TEAMS[si], WEAK_TEAMS[wi]]);
-  }
+  // Fixed pairs — exactly 60, shuffled at seed time
+  var pairs = [
+    ["England",       "Algeria"],
+    ["Morocco",       "Algeria"],
+    ["Portugal",      "Australia"],
+    ["Senegal",       "Australia"],
+    ["Spain",         "Australia"],
+    ["England",       "Bosnia and Herzegovina"],
+    ["Senegal",       "Bosnia and Herzegovina"],
+    ["Brazil",        "Cabo Verde"],
+    ["Côte d'Ivoire", "Cabo Verde"],
+    ["Croatia",       "Cameroon"],
+    ["Morocco",       "Cameroon"],
+    ["Spain",         "Cameroon"],
+    ["Austria",       "Canada"],
+    ["Norway",        "Canada"],
+    ["South Korea",   "Congo DR"],
+    ["Switzerland",   "Congo DR"],
+    ["Argentina",     "Curaçao"],
+    ["Japan",         "Curaçao"],
+    ["France",        "Czechia"],
+    ["Netherlands",   "Czechia"],
+    ["France",        "Ecuador"],
+    ["South Korea",   "Ecuador"],
+    ["Belgium",       "Egypt"],
+    ["Côte d'Ivoire", "Egypt"],
+    ["Norway",        "Ghana"],
+    ["Senegal",       "Ghana"],
+    ["Argentina",     "Haiti"],
+    ["Sweden",        "Haiti"],
+    ["Brazil",        "Iran"],
+    ["France",        "Iran"],
+    ["Portugal",      "Iran"],
+    ["Austria",       "Jordan"],
+    ["Germany",       "Jordan"],
+    ["Brazil",        "New Zealand"],
+    ["Mexico",        "New Zealand"],
+    ["United States", "New Zealand"],
+    ["Colombia",      "Panama"],
+    ["Japan",         "Panama"],
+    ["Colombia",      "Paraguay"],
+    ["Croatia",       "Paraguay"],
+    ["Germany",       "Qatar"],
+    ["Germany",       "Qatar"],
+    ["Türkiye",       "Qatar"],
+    ["Netherlands",   "Saudi Arabia"],
+    ["Sweden",        "Saudi Arabia"],
+    ["Uruguay",       "Saudi Arabia"],
+    ["Argentina",     "Scotland"],
+    ["Türkiye",       "Scotland"],
+    ["England",       "Scotland"],
+    ["Belgium",       "South Africa"],
+    ["Morocco",       "South Africa"],
+    ["Uruguay",       "South Africa"],
+    ["Spain",         "Tunisia"],
+    ["Switzerland",   "Tunisia"],
+    ["United States", "Tunisia"],
+    ["Belgium",       "Uzbekistan"],
+    ["Mexico",        "Uzbekistan"],
+    ["Portugal",      "Uzbekistan"],
+    ["Uruguay",       "Algeria"],
+    ["Türkiye",       "Paraguay"]
+  ];
 
-  for (var n = pairs.length - 1; n > 0; n--) {
-    var r = Math.floor(Math.random() * (n + 1));
-    var temp = pairs[n]; pairs[n] = pairs[r]; pairs[r] = temp;
-  }
+  pairs = shuffleArray(pairs);
 
   var rows = [];
   for (var p = 0; p < pairs.length; p++) {

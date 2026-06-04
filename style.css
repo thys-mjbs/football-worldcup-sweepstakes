@@ -80,7 +80,7 @@ body {
    ============================================================ */
 
 .brand-logo {
-  width: 52px;
+  width: 104px;
   height: auto;
   margin-bottom: 6px;
 }
@@ -538,7 +538,7 @@ img.emoji {
 @media (min-width: 600px) {
   .card { padding: 36px 32px; }
   h1 { font-size: 1.6rem; }
-  .brand-logo { width: 68px; }
+  .brand-logo { width: 136px; }
   .trophy { font-size: 2.5rem; }
   .team-flag { font-size: 3.5rem; }
   .team-name { font-size: 0.95rem; }
