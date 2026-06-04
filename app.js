@@ -26,6 +26,26 @@ const PARTICIPANTS = [
 ];
 
 // ============================================================
+// TEAM LISTS — used to restrict each reel to the correct pool
+// ============================================================
+
+const STRONG_TEAMS = [
+  "Argentina", "Brazil", "France", "Spain", "England",
+  "Germany", "Portugal", "Netherlands", "Belgium", "Croatia",
+  "Uruguay", "Morocco", "Colombia", "Switzerland", "Mexico",
+  "United States", "Japan", "South Korea", "Senegal", "Norway",
+  "Sweden", "Austria", "Türkiye", "Côte d'Ivoire"
+];
+
+const WEAK_TEAMS = [
+  "Jordan", "Uzbekistan", "Curaçao", "Haiti", "New Zealand",
+  "Cabo Verde", "Panama", "Qatar", "Saudi Arabia", "South Africa",
+  "Ghana", "Tunisia", "Algeria", "Egypt", "Congo DR",
+  "Bosnia and Herzegovina", "Australia", "Paraguay", "Ecuador",
+  "Canada", "Iran", "Scotland", "Czechia", "Cameroon"
+];
+
+// ============================================================
 // FLAG EMOJIS
 // ============================================================
 
@@ -317,18 +337,18 @@ var WIN_H = 120;
 var REEL_PAD = 2; // items visible above/below the selected team when stopped
 
 function buildReels() {
-  fillReel("reel-strong", null, false);
-  fillReel("reel-weak", null, true);
+  fillReel("reel-strong", null, false, STRONG_TEAMS);
+  fillReel("reel-weak",   null, true,  WEAK_TEAMS);
 }
 
-function fillReel(reelId, finalTeam, reverse) {
+function fillReel(reelId, finalTeam, reverse, teamPool) {
   var reel = document.getElementById(reelId);
   reel.innerHTML = "";
 
-  var allTeams = Object.keys(TEAM_FLAGS);
+  var pool = teamPool || Object.keys(TEAM_FLAGS);
   var others = finalTeam
-    ? allTeams.filter(function (t) { return t !== finalTeam; })
-    : allTeams.slice();
+    ? pool.filter(function (t) { return t !== finalTeam; })
+    : pool.slice();
 
   // 54 random scroll items
   var randoms = [];
@@ -413,8 +433,8 @@ function claimThenSpin() {
         team2: data.team2
       }));
       // Rebuild reels so they land on the actual assigned teams
-      fillReel("reel-strong", data.team1, false);
-      fillReel("reel-weak", data.team2, true);
+      fillReel("reel-strong", data.team1, false, STRONG_TEAMS);
+      fillReel("reel-weak",   data.team2, true,  WEAK_TEAMS);
       runSpinAnimation(function () {
         showResult(data.name, data.team1, data.team2, false);
       });
