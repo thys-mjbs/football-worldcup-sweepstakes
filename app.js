@@ -5,6 +5,7 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz19-L4XRtXoTyF6SbvSG0iRxzD28it3kNmBkCZlDCZjzx_jZhhywihaHvhQxVuOuBg/exec";
 const REMOVE_CLAIMED_NAMES = true;
 const SPIN_DURATION_MS = 4000;
+const APP_TITLE = "DGMC FIFA 2026 Sweepstakes";
 
 // ============================================================
 // PARTICIPANT NAMES — edit this list if needed
@@ -333,6 +334,49 @@ function showResult(team1, team2) {
   document.getElementById("result-flag-weak").textContent = TEAM_FLAGS[team2] || "🏳";
   document.getElementById("result-name-weak").textContent = team2;
   showScreen("screen-result");
+  bindShareButtons(team1, team2);
+}
+
+// ============================================================
+// SHARE BUTTONS
+// ============================================================
+
+function bindShareButtons(team1, team2) {
+  var flag1 = TEAM_FLAGS[team1] || "🏳";
+  var flag2 = TEAM_FLAGS[team2] || "🏳";
+
+  var message = "🏆 DGMC FIFA 2026 Sweepstakes\n\n"
+    + selectedName + " got:\n"
+    + flag1 + " " + team1 + " (Strong Pick)\n"
+    + flag2 + " " + team2 + " (Wild Card)\n\n"
+    + "Good luck to everyone! ⚽";
+
+  document.getElementById("whatsapp-btn").addEventListener("click", function () {
+    var url = "https://wa.me/?text=" + encodeURIComponent(message);
+    window.open(url, "_blank");
+  });
+
+  document.getElementById("copy-btn").addEventListener("click", function () {
+    var confirm = document.getElementById("copy-confirm");
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(message).then(function () {
+        confirm.textContent = "✓ Copied to clipboard!";
+        setTimeout(function () { confirm.textContent = ""; }, 3000);
+      });
+    } else {
+      // Fallback for older browsers
+      var ta = document.createElement("textarea");
+      ta.value = message;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      confirm.textContent = "✓ Copied to clipboard!";
+      setTimeout(function () { confirm.textContent = ""; }, 3000);
+    }
+  });
 }
 
 // ============================================================
