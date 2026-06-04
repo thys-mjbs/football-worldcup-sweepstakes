@@ -145,13 +145,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function loadState() {
   showLoading(true);
+  document.getElementById("retry-btn").classList.add("hidden");
 
-  fetch(SCRIPT_URL + "?action=getState")
-    .then(function (res) { return res.json(); })
+  var controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+  var timeoutId = controller
+    ? setTimeout(function () { controller.abort(); }, 12000)
+    : null;
+
+  var opts = controller ? { signal: controller.signal } : {};
+
+  fetch(SCRIPT_URL + "?action=getState", opts)
+    .then(function (res) {
+      if (timeoutId) clearTimeout(timeoutId);
+      return res.json();
+    })
     .then(function (data) {
       showLoading(false);
       if (!data.success) {
-        showError("Could not load participant list: " + data.error);
+        showError("Could not load. Tap Retry to try again.");
+        document.getElementById("retry-btn").classList.remove("hidden");
         return;
       }
       populateDropdown(data.participants);
@@ -159,8 +171,10 @@ function loadState() {
       updateLeaderboardToggle(data.participants);
     })
     .catch(function () {
+      if (timeoutId) clearTimeout(timeoutId);
       showLoading(false);
-      showError("Network error. Please check your connection and refresh.");
+      showError("Could not connect. Check your signal and tap Retry.");
+      document.getElementById("retry-btn").classList.remove("hidden");
     });
 }
 
@@ -259,6 +273,11 @@ function bindEvents() {
     claimThenSpin();
   });
 
+  document.getElementById("retry-btn").addEventListener("click", function () {
+    hideError();
+    loadState();
+  });
+
   document.getElementById("try-again-btn").addEventListener("click", function () {
     window.location.reload();
   });
@@ -283,9 +302,15 @@ function bindBackButton() {
   var btn = document.getElementById("back-home-btn");
   if (btn) {
     btn.addEventListener("click", function () {
-      // Clear session so they land on the home screen (not the already-spun screen)
       sessionStorage.removeItem("hasSpun");
       sessionStorage.removeItem("spinResult");
+      window.location.reload();
+    });
+  }
+  var fresh = document.getElementById("start-fresh-btn");
+  if (fresh) {
+    fresh.addEventListener("click", function () {
+      sessionStorage.clear();
       window.location.reload();
     });
   }

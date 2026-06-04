@@ -43,6 +43,7 @@
         </select>
       </div>
       <p id="error-msg" class="error hidden"></p>
+      <button id="retry-btn" class="btn btn-secondary hidden">↺ Retry</button>
       <button id="spin-btn" class="btn btn-primary" disabled>Let's Spin!</button>
     </div>
 
@@ -52,9 +53,9 @@
       <h3>Team Draw Results</h3>
       <div class="lb-table">
         <div class="lb-row lb-header">
-          <span>Main Team</span>
+          <span>Top Pick</span>
           <span class="lb-name-col">Name</span>
-          <span class="lb-right">Wild Card</span>
+          <span class="lb-right">Wild Card Pick</span>
         </div>
         <div id="leaderboard-body"></div>
       </div>
@@ -113,16 +114,15 @@
         <div class="team-card">
           <div class="team-flag" id="result-flag-strong"></div>
           <div class="team-name" id="result-name-strong"></div>
-          <div class="team-label">Main Team</div>
         </div>
         <div class="team-card">
           <div class="team-flag" id="result-flag-weak"></div>
           <div class="team-name" id="result-name-weak"></div>
-          <div class="team-label">Wild Card</div>
         </div>
       </div>
       <p class="good-luck" id="result-good-luck">Teams assigned, names recorded, hopes high! Wishing everyone the best of luck for the tournament.</p>
       <button id="back-home-btn" class="btn btn-back">← Back to Home</button>
+      <button id="start-fresh-btn" class="btn btn-back" style="margin-top:6px;font-size:0.78rem;color:var(--text-muted);">Not you? Tap here to start fresh</button>
     </div>
   </div>
 
