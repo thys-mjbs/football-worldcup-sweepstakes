@@ -241,9 +241,9 @@ function sendEmail(name, team1, team2, timestamp) {
 
   if (!targetEmail || targetEmail.toString().trim().toUpperCase() === "N/A") return;
 
-  var subject = "FIFA Sweepstakes — " + name + " has spun their teams";
+  var subject = "DGMC World Cup Team Draw — " + name + " has drawn their teams";
   var body = "Hi,\n\n"
-    + name + " has completed their draw in the DGMC FIFA 2026 Sweepstakes.\n\n"
+    + name + " has completed their draw in the DGMC Radiology World Cup Team Draw.\n\n"
     + "Their teams are:\n"
     + "  - " + team1 + " (Main Team)\n"
     + "  - " + team2 + " (Wild Card)\n\n"
@@ -309,18 +309,18 @@ function seedParticipants() {
   }
 
   var names = [
-    "Danae", "Liza", "Mandy", "Cherne", "Elrentia",
-    "Thobeka", "Nhlanhla", "Thandekile", "Martene", "Claire",
-    "Sithembile", "Yasmeen", "Carina", "Macdonald", "Monare",
-    "Akleema", "Samantha", "Mamasita", "Yogita", "Miyelani",
-    "Constance", "Mpho", "Mpumzi", "Gugu", "Gail",
-    "Itumeleng", "Thomas", "Blandina", "Refilwe", "Robert",
-    "Shadrack", "Nadia", "Tamzin", "Prescious", "Kenneth",
-    "Landiwe", "Veli", "Ntombizodwa", "Victor", "Michael",
-    "Tshilisanani", "Yerisha", "Hajra", "Lusanda", "Dedre",
-    "Ellenor", "Humayra", "Zanele", "Marcelle", "Prof Sanyika",
-    "Dr Cantrell", "Dr Omar", "Dr Singh", "Dr Brachmayer", "Dr Daya",
-    "Dr Poyiadji", "Dr Oren", "Dr Terreblanche", "Dane", "Marizanne"
+    "Akleema", "Blandina", "Dr. Brachmayer", "Dr. Cantrell",
+    "Carina", "Cherne", "Claire", "Constance", "Danae", "Dr. Daya",
+    "Dedre", "Ellenor", "Elrentia", "Gail", "Gugu", "Hajra",
+    "Humayra", "Itumeleng", "Kenneth", "Landiwe", "Liza", "Lusanda",
+    "Macdonald", "Mamasita", "Mandy", "Marcelle", "Marizanne",
+    "Martene", "Michael", "Miyelani", "Monare", "Mpho", "Mpumzi",
+    "Nadia", "Nhlanhla", "Ntombizodwa", "Dr. Omar", "Dr. Oren",
+    "Dr. Poyiadji", "Prescious", "Prof Sanyika", "Dr. Rampini",
+    "Refilwe", "Robert", "Samantha", "Shadrack", "Dr. Singh",
+    "Sithembile", "Tamzin", "Dr. Terreblanche", "Thandekile",
+    "Thobeka", "Thomas", "Tshilisanani", "Veli", "Victor",
+    "Yasmeen", "Yerisha", "Yogita", "Zanele"
   ];
 
   var rows = names.map(function (n) { return [n, "", "", "", ""]; });

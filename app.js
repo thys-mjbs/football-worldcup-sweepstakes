@@ -11,19 +11,18 @@ const SPIN_DURATION_MS = 16000;
 // ============================================================
 
 const PARTICIPANTS = [
-  "Akleema", "Blandina", "Carina", "Cherne", "Claire",
-  "Constance", "Danae", "Dane", "Dedre", "Ellenor",
-  "Elrentia", "Gail", "Gugu", "Hajra", "Humayra",
-  "Itumeleng", "Kenneth", "Landiwe", "Liza", "Lusanda",
+  "Akleema", "Blandina", "Dr. Brachmayer", "Dr. Cantrell",
+  "Carina", "Cherne", "Claire", "Constance", "Danae", "Dr. Daya",
+  "Dedre", "Ellenor", "Elrentia", "Gail", "Gugu", "Hajra",
+  "Humayra", "Itumeleng", "Kenneth", "Landiwe", "Liza", "Lusanda",
   "Macdonald", "Mamasita", "Mandy", "Marcelle", "Marizanne",
-  "Martene", "Michael", "Miyelani", "Monare", "Mpho",
-  "Mpumzi", "Nadia", "Nhlanhla", "Ntombizodwa", "Prescious",
-  "Prof Sanyika", "Refilwe", "Robert", "Samantha", "Shadrack",
-  "Sithembile", "Tamzin", "Thandekile", "Thobeka", "Thomas",
-  "Tshilisanani", "Veli", "Victor", "Yasmeen", "Yerisha",
-  "Yogita", "Zanele",
-  "Dr Brachmayer", "Dr Cantrell", "Dr Daya", "Dr Omar",
-  "Dr Oren", "Dr Poyiadji", "Dr Singh", "Dr Terreblanche"
+  "Martene", "Michael", "Miyelani", "Monare", "Mpho", "Mpumzi",
+  "Nadia", "Nhlanhla", "Ntombizodwa", "Dr. Omar", "Dr. Oren",
+  "Dr. Poyiadji", "Prescious", "Prof Sanyika", "Dr. Rampini",
+  "Refilwe", "Robert", "Samantha", "Shadrack", "Dr. Singh",
+  "Sithembile", "Tamzin", "Dr. Terreblanche", "Thandekile",
+  "Thobeka", "Thomas", "Tshilisanani", "Veli", "Victor",
+  "Yasmeen", "Yerisha", "Yogita", "Zanele"
 ];
 
 // ============================================================
@@ -231,6 +230,10 @@ function bindEvents() {
     claimThenSpin();
   });
 
+  document.getElementById("try-again-btn").addEventListener("click", function () {
+    window.location.reload();
+  });
+
   document.getElementById("leaderboard-toggle").addEventListener("click", function () {
     var panel = document.getElementById("leaderboard-panel");
     var isHidden = panel.classList.contains("hidden");
@@ -360,6 +363,8 @@ function showSpinError(msg) {
     el.textContent = msg;
     el.classList.remove("hidden");
   }
+  var btn = document.getElementById("try-again-btn");
+  if (btn) btn.classList.remove("hidden");
 }
 
 // ============================================================

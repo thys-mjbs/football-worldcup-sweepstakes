@@ -267,43 +267,55 @@ select:focus {
 .spin-instruction {
   font-size: 0.9rem;
   color: var(--text-muted);
-  margin-bottom: 4px;
+  margin-bottom: 10px;
   margin-top: -4px;
 }
 
 .spin-instruction strong { color: var(--accent); }
 
-.spinners-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin: 20px 0;
-}
-
-.spinner-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.spinner-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+.spin-info-tile {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 0.8rem;
   color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+/* Joined spinner tile */
+.spinners-joined {
+  display: flex;
+  align-items: stretch;
+  border: 2px solid var(--accent2);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 16px;
+  height: 120px;
+  background: var(--surface2);
+}
+
+.spinner-half {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.spinner-divider {
+  width: 1px;
+  background: var(--border);
+  flex-shrink: 0;
 }
 
 .spinner-window {
   width: 100%;
   height: 120px;
-  border: 2px solid var(--accent2);
-  border-radius: var(--radius-sm);
+  border: none;
+  border-radius: 0;
   overflow: hidden;
-  background: var(--surface2);
+  background: transparent;
   position: relative;
 }
 
@@ -335,14 +347,14 @@ select:focus {
 .reel-select-zone {
   position: absolute;
   top: 40px;
-  left: 6px;
-  right: 6px;
+  left: 4px;
+  right: 4px;
   height: 40px;
-  border: 1px solid rgba(245, 166, 35, 0.5);
-  border-radius: 4px;
+  border: 1px solid rgba(245, 166, 35, 0.4);
+  border-radius: 3px;
   z-index: 3;
   pointer-events: none;
-  background: rgba(245, 166, 35, 0.04);
+  background: rgba(245, 166, 35, 0.03);
 }
 
 .reel-item {
@@ -361,15 +373,7 @@ select:focus {
   text-align: center;
 }
 
-/* reel-landing class is used for animation targeting only — no visual distinction during spin */
-
-.vs-divider {
-  font-size: 0.75rem;
-  font-weight: 900;
-  color: var(--text-muted);
-  flex-shrink: 0;
-  padding-top: 28px;
-}
+/* reel-landing used for animation targeting only — no visual distinction during spin */
 
 /* ============================================================
    Result screen

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0D2137" />
-  <title>DGMC FIFA 2026 Sweepstakes</title>
+  <title>DGMC Radiology World Cup Team Draw</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
@@ -20,10 +20,10 @@
   <div id="screen-landing" class="screen screen-landing active">
     <div class="card">
       <img src="DGMC_Logo.png" alt="DGMC Radiology" class="brand-logo" />
-      <div class="trophy">🏆</div>
-      <h1 id="app-title">DGMC FIFA 2026 Sweepstakes</h1>
+      <div class="trophy">⚽</div>
+      <h1 id="app-title">DGMC Radiology World Cup Team Draw</h1>
       <p class="tagline">Draw your World Cup team today!</p>
-      <p id="welcome-message">Whether you get a tournament favourite or an underdog, support your team all the way to the final and enjoy the exciting competition.<br><br>Great prizes are up for grabs! ⚽🏆🌍</p>
+      <p id="welcome-message">Whether you get a tournament favourite or an underdog, support your team all the way to the final and enjoy the exciting competition.<br><br>Great prizes are up for grabs! 🏆</p>
       <div class="form-group">
         <label for="name-select">Select your name to spin</label>
         <select id="name-select">
@@ -69,17 +69,18 @@
     <div class="card">
       <h2>Your teams await…</h2>
       <p class="spin-instruction">👇 Tap <strong>SPIN</strong> to reveal your two teams!</p>
-      <div class="spinners-row">
-        <div class="spinner-col">
-          <div class="spinner-label">Main Team</div>
+      <div class="spin-info-tile">
+        Two teams, twice the excitement! Each participant will draw 2 teams. Some teams have been duplicated to balance the draw, so sit back, enjoy the tournament, and cheer your teams on!
+      </div>
+      <div class="spinners-joined">
+        <div class="spinner-half">
           <div class="spinner-window">
             <div class="reel-select-zone"></div>
             <div id="reel-strong" class="reel"></div>
           </div>
         </div>
-        <div class="vs-divider">VS</div>
-        <div class="spinner-col">
-          <div class="spinner-label">Wild Card</div>
+        <div class="spinner-divider"></div>
+        <div class="spinner-half">
           <div class="spinner-window">
             <div class="reel-select-zone"></div>
             <div id="reel-weak" class="reel"></div>
@@ -87,6 +88,7 @@
         </div>
       </div>
       <p id="spin-error" class="error hidden"></p>
+      <button id="try-again-btn" class="btn btn-secondary hidden">↺ Refresh &amp; Try Again</button>
       <button id="do-spin-btn" class="btn btn-primary btn-large">🎰 SPIN!</button>
     </div>
   </div>
