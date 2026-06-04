@@ -11,18 +11,19 @@ const SPIN_DURATION_MS = 10000;
 // ============================================================
 
 const PARTICIPANTS = [
-  "Danae", "Liza", "Mandy", "Cherne", "Elrentia",
-  "Thobeka", "Nhlanhla", "Thandekile", "Martene", "Claire",
-  "Sithembile", "Yasmeen", "Carina", "Macdonald", "Monare",
-  "Akleema", "Samantha", "Mamasita", "Yogita", "Miyelani",
-  "Constance", "Mpho", "Mpumzi", "Gugu", "Gail",
-  "Itumeleng", "Thomas", "Blandina", "Refilwe", "Robert",
-  "Shadrack", "Nadia", "Tamzin", "Prescious", "Kenneth",
-  "Landiwe", "Veli", "Ntombizodwa", "Victor", "Michael",
-  "Tshilisanani", "Yerisha", "Hajra", "Lusanda", "Dedre",
-  "Ellenor", "Humayra", "Zanele", "Marcelle", "Prof Sanyika",
-  "Dr Cantrell", "Dr Omar", "Dr Singh", "Dr Brachmayer", "Dr Daya",
-  "Dr Poyiadji", "Dr Oren", "Dr Terreblanche", "Dane", "Marizanne"
+  "Akleema", "Blandina", "Carina", "Cherne", "Claire",
+  "Constance", "Danae", "Dane", "Dedre", "Ellenor",
+  "Elrentia", "Gail", "Gugu", "Hajra", "Humayra",
+  "Itumeleng", "Kenneth", "Landiwe", "Liza", "Lusanda",
+  "Macdonald", "Mamasita", "Mandy", "Marcelle", "Marizanne",
+  "Martene", "Michael", "Miyelani", "Monare", "Mpho",
+  "Mpumzi", "Nadia", "Nhlanhla", "Ntombizodwa", "Prescious",
+  "Prof Sanyika", "Refilwe", "Robert", "Samantha", "Shadrack",
+  "Sithembile", "Tamzin", "Thandekile", "Thobeka", "Thomas",
+  "Tshilisanani", "Veli", "Victor", "Yasmeen", "Yerisha",
+  "Yogita", "Zanele",
+  "Dr Brachmayer", "Dr Cantrell", "Dr Daya", "Dr Omar",
+  "Dr Oren", "Dr Poyiadji", "Dr Singh", "Dr Terreblanche"
 ];
 
 // ============================================================
@@ -163,7 +164,11 @@ function populateDropdown(participants) {
 
 function populateLeaderboard(participants) {
   var body = document.getElementById("leaderboard-body");
-  var claimed = participants.filter(function (p) { return p.claimed && p.team1; });
+  var claimed = participants
+    .filter(function (p) { return p.claimed && p.team1; })
+    .sort(function (a, b) {
+      return PARTICIPANTS.indexOf(a.name) - PARTICIPANTS.indexOf(b.name);
+    });
 
   if (claimed.length === 0) {
     body.innerHTML = '<p class="lb-empty">No picks yet — be the first!</p>';
