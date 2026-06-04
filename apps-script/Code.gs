@@ -268,8 +268,10 @@ function seedTeamPool() {
 
   var pairs = [];
   for (var set = 0; set < 2; set++) {
-    for (var i = 0; i < STRONG_TEAMS.length; i++) {
-      pairs.push([STRONG_TEAMS[i], WEAK_TEAMS[i]]);
+    var sStrong = shuffleArray(STRONG_TEAMS.slice());
+    var sWeak   = shuffleArray(WEAK_TEAMS.slice());
+    for (var i = 0; i < sStrong.length; i++) {
+      pairs.push([sStrong[i], sWeak[i]]);
     }
   }
   for (var k = 0; k < 12; k++) {
@@ -289,6 +291,14 @@ function seedTeamPool() {
   }
   poolSheet.getRange(2, 1, rows.length, 6).setValues(rows);
   Logger.log("Seeded " + rows.length + " pairs.");
+}
+
+function shuffleArray(arr) {
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+  return arr;
 }
 
 function seedParticipants() {

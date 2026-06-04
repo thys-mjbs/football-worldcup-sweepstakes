@@ -221,14 +221,14 @@ function bindEvents() {
   });
 
   document.getElementById("confirm-btn").addEventListener("click", function () {
-    buildReels();
     document.getElementById("do-spin-btn").disabled = false;
+    buildReels(); // pre-fill reels with random static teams while waiting
     showScreen("screen-spin");
   });
 
   document.getElementById("do-spin-btn").addEventListener("click", function () {
     this.disabled = true;
-    runSpinAnimation();
+    claimThenSpin();
   });
 
   document.getElementById("leaderboard-toggle").addEventListener("click", function () {
@@ -260,37 +260,51 @@ function bindBackButton() {
 }
 
 // ============================================================
-// BUILD REELS — pure theater, actual teams assigned server-side
+// BUILD REELS — static preview before spin
 // ============================================================
 
+var ITEM_H = 40;
+var WIN_H = 120;
+
 function buildReels() {
-  buildReel("reel-strong", false);
-  buildReel("reel-weak", true);
+  fillReel("reel-strong", null, false);
+  fillReel("reel-weak", null, true);
 }
 
-function buildReel(reelId, reverse) {
+function fillReel(reelId, finalTeam, reverse) {
   var reel = document.getElementById(reelId);
   reel.innerHTML = "";
 
   var allTeams = Object.keys(TEAM_FLAGS);
-  var items = [];
-  while (items.length < 60) {
-    items = items.concat(shuffle(allTeams.slice()));
-  }
-  items = items.slice(0, 60);
+  var others = finalTeam
+    ? allTeams.filter(function (t) { return t !== finalTeam; })
+    : allTeams.slice();
 
-  items.forEach(function (team) {
+  var items = [];
+  while (items.length < 56) {
+    items = items.concat(shuffle(others.slice()));
+  }
+  items = items.slice(0, 56);
+
+  if (finalTeam) {
+    if (reverse) {
+      items.unshift(finalTeam);
+    } else {
+      items.push(finalTeam);
+    }
+  }
+
+  items.forEach(function (team, idx) {
     var div = document.createElement("div");
-    div.className = "reel-item";
+    var isLanding = finalTeam && (reverse ? idx === 0 : idx === items.length - 1);
+    div.className = "reel-item" + (isLanding ? " reel-landing" : "");
     div.textContent = team;
     reel.appendChild(div);
   });
 
-  var ITEM_H = 40;
-  var WIN_H = 120;
   var centre = (WIN_H / 2) - (ITEM_H / 2);
-
   reel.style.transition = "none";
+
   if (reverse) {
     var startY = -((items.length - 1) * ITEM_H) + centre;
     reel.style.transform = "translateY(" + startY + "px)";
@@ -300,50 +314,10 @@ function buildReel(reelId, reverse) {
 }
 
 // ============================================================
-// SPIN ANIMATION
+// CLAIM THEN SPIN — API first, animate with real teams
 // ============================================================
 
-function runSpinAnimation() {
-  var reelStrong = document.getElementById("reel-strong");
-  var reelWeak = document.getElementById("reel-weak");
-
-  var ITEM_H = 40;
-  var WIN_H = 120;
-  var centre = (WIN_H / 2) - (ITEM_H / 2);
-
-  // Normal: scrolls upward, snappy deceleration
-  function animateNormal(reel) {
-    var n = reel.children.length;
-    var stopAt = Math.floor(n * 0.55) + Math.floor(Math.random() * 8);
-    var targetY = -(stopAt * ITEM_H) + centre;
-    reel.getBoundingClientRect();
-    reel.style.transition = "transform " + (SPIN_DURATION_MS / 1000) + "s cubic-bezier(0.12, 0.88, 0.4, 1.0)";
-    reel.style.transform = "translateY(" + targetY + "px)";
-  }
-
-  // Reverse: scrolls downward, slightly faster, different easing
-  function animateReverse(reel) {
-    var n = reel.children.length;
-    var stopAt = Math.floor(n * 0.38) - Math.floor(Math.random() * 8);
-    if (stopAt < 5) stopAt = 5;
-    var targetY = -(stopAt * ITEM_H) + centre;
-    var duration = (SPIN_DURATION_MS * 0.85) / 1000;
-    reel.getBoundingClientRect();
-    reel.style.transition = "transform " + duration + "s cubic-bezier(0.08, 0.92, 0.32, 1.0)";
-    reel.style.transform = "translateY(" + targetY + "px)";
-  }
-
-  animateNormal(reelStrong);
-  setTimeout(function () { animateReverse(reelWeak); }, 120);
-
-  setTimeout(function () { submitClaim(); }, SPIN_DURATION_MS + 300);
-}
-
-// ============================================================
-// SUBMIT CLAIM
-// ============================================================
-
-function submitClaim() {
+function claimThenSpin() {
   showLoading(true);
   sessionStorage.setItem("hasSpun", "1");
 
@@ -356,8 +330,8 @@ function submitClaim() {
       showLoading(false);
       if (!data.success) {
         sessionStorage.removeItem("hasSpun");
-        showScreen("screen-landing");
-        showError("Could not record your teams: " + data.error);
+        document.getElementById("do-spin-btn").disabled = false;
+        showSpinError("Could not record your teams: " + data.error);
         return;
       }
       sessionStorage.setItem("spinResult", JSON.stringify({
@@ -365,14 +339,57 @@ function submitClaim() {
         team1: data.team1,
         team2: data.team2
       }));
-      showResult(data.name, data.team1, data.team2, false);
+      // Rebuild reels so they land on the actual assigned teams
+      fillReel("reel-strong", data.team1, false);
+      fillReel("reel-weak", data.team2, true);
+      runSpinAnimation(function () {
+        showResult(data.name, data.team1, data.team2, false);
+      });
     })
     .catch(function () {
       showLoading(false);
       sessionStorage.removeItem("hasSpun");
-      showScreen("screen-landing");
-      showError("Network error. Please try again or contact the organiser.");
+      document.getElementById("do-spin-btn").disabled = false;
+      showSpinError("Network error. Please try again.");
     });
+}
+
+function showSpinError(msg) {
+  var el = document.getElementById("spin-error");
+  if (el) {
+    el.textContent = msg;
+    el.classList.remove("hidden");
+  }
+}
+
+// ============================================================
+// SPIN ANIMATION
+// ============================================================
+
+function runSpinAnimation(onComplete) {
+  var reelStrong = document.getElementById("reel-strong");
+  var reelWeak   = document.getElementById("reel-weak");
+  var centre = (WIN_H / 2) - (ITEM_H / 2);
+
+  function animateNormal(reel) {
+    var n = reel.children.length;
+    var targetY = -((n - 1) * ITEM_H) + centre;
+    reel.getBoundingClientRect();
+    reel.style.transition = "transform " + (SPIN_DURATION_MS / 1000) + "s cubic-bezier(0.12, 0.88, 0.4, 1.0)";
+    reel.style.transform = "translateY(" + targetY + "px)";
+  }
+
+  function animateReverse(reel) {
+    var duration = (SPIN_DURATION_MS * 0.85) / 1000;
+    var targetY = centre;
+    reel.getBoundingClientRect();
+    reel.style.transition = "transform " + duration + "s cubic-bezier(0.08, 0.92, 0.32, 1.0)";
+    reel.style.transform = "translateY(" + targetY + "px)";
+  }
+
+  animateNormal(reelStrong);
+  setTimeout(function () { animateReverse(reelWeak); }, 120);
+  setTimeout(onComplete, SPIN_DURATION_MS + 400);
 }
 
 // ============================================================

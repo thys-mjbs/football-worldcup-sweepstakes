@@ -332,6 +332,19 @@ select:focus {
   will-change: transform;
 }
 
+.reel-select-zone {
+  position: absolute;
+  top: 40px;
+  left: 6px;
+  right: 6px;
+  height: 40px;
+  border: 1px solid rgba(245, 166, 35, 0.5);
+  border-radius: 4px;
+  z-index: 3;
+  pointer-events: none;
+  background: rgba(245, 166, 35, 0.04);
+}
+
 .reel-item {
   height: 40px;
   display: flex;
@@ -346,6 +359,11 @@ select:focus {
   text-overflow: ellipsis;
   width: 100%;
   text-align: center;
+}
+
+.reel-item.reel-landing {
+  color: var(--accent);
+  font-weight: 800;
 }
 
 .vs-divider {
