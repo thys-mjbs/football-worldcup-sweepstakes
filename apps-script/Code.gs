@@ -239,6 +239,8 @@ function sendEmail(name, team1, team2, timestamp) {
   var configSheet = ss.getSheetByName("Config");
   var targetEmail = configSheet.getRange(2, 2).getValue();
 
+  if (!targetEmail || targetEmail.toString().trim().toUpperCase() === "N/A") return;
+
   var subject = "FIFA Sweepstakes — " + name + " has spun their teams";
   var body = "Hi,\n\n"
     + name + " has completed their draw in the DGMC FIFA 2026 Sweepstakes.\n\n"
