@@ -361,10 +361,7 @@ select:focus {
   text-align: center;
 }
 
-.reel-item.reel-landing {
-  color: var(--accent);
-  font-weight: 800;
-}
+/* reel-landing class is used for animation targeting only — no visual distinction during spin */
 
 .vs-divider {
   font-size: 0.75rem;

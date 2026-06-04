@@ -4,7 +4,7 @@
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz19-L4XRtXoTyF6SbvSG0iRxzD28it3kNmBkCZlDCZjzx_jZhhywihaHvhQxVuOuBg/exec";
 const REMOVE_CLAIMED_NAMES = true;
-const SPIN_DURATION_MS = 10000;
+const SPIN_DURATION_MS = 16000;
 
 // ============================================================
 // PARTICIPANTS
