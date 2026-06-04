@@ -63,21 +63,21 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 32px 24px;
+  padding: 24px 20px;
   width: 100%;
   text-align: center;
   box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
 
 .brand-logo {
-  width: 80px;
+  width: 52px;
   height: auto;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .trophy {
-  font-size: 3rem;
-  margin-bottom: 12px;
+  font-size: 2rem;
+  margin-bottom: 8px;
 }
 
 h1 {
@@ -445,6 +445,8 @@ select option:disabled {
 @media (min-width: 600px) {
   .card { padding: 40px 36px; }
   h1 { font-size: 1.75rem; }
+  .brand-logo { width: 72px; }
+  .trophy { font-size: 2.5rem; }
   .team-flag { font-size: 3.5rem; }
   .team-name { font-size: 0.95rem; }
   .reel-item { font-size: 0.9rem; }
