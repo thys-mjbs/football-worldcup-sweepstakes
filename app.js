@@ -4,7 +4,7 @@
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz19-L4XRtXoTyF6SbvSG0iRxzD28it3kNmBkCZlDCZjzx_jZhhywihaHvhQxVuOuBg/exec";
 const REMOVE_CLAIMED_NAMES = true;
-const SPIN_DURATION_MS = 4000;
+const SPIN_DURATION_MS = 10000;
 
 // ============================================================
 // PARTICIPANTS
@@ -182,14 +182,15 @@ function populateLeaderboard(participants) {
   });
 
   body.innerHTML = html;
+  applyTwemoji(body);
 }
 
 function updateLeaderboardToggle(participants) {
   var count = participants.filter(function (p) { return p.claimed; }).length;
   var btn = document.getElementById("leaderboard-toggle");
   var label = count === 0
-    ? "🏆 View Leaderboard — no picks yet"
-    : "🏆 View Leaderboard — " + count + " of 60 picked";
+    ? "🏆 View Leaderboard (no picks yet)"
+    : "🏆 View Leaderboard (" + count + " of 60 picked)";
   btn.textContent = label;
 }
 
@@ -376,7 +377,7 @@ function submitClaim() {
 function showResult(name, team1, team2, isRecovery) {
   var greeting = isRecovery
     ? "Welcome back, " + name + "! Here are your teams again."
-    : "Hey " + name + ", here are your teams! 🎉";
+    : "Well done, " + name + "! Here are your teams! 🎉";
 
   document.getElementById("result-greeting").textContent = greeting;
   document.getElementById("result-flag-strong").textContent = TEAM_FLAGS[team1] || "🏳";
@@ -389,47 +390,7 @@ function showResult(name, team1, team2, isRecovery) {
   }
 
   showScreen("screen-result");
-  bindShareButtons(name, team1, team2);
-}
-
-// ============================================================
-// SHARE
-// ============================================================
-
-function bindShareButtons(name, team1, team2) {
-  var f1 = TEAM_FLAGS[team1] || "🏳";
-  var f2 = TEAM_FLAGS[team2] || "🏳";
-
-  var message = "🏆 DGMC FIFA 2026 Sweepstakes\n\n"
-    + "I just drew my World Cup teams!\n\n"
-    + "I'm " + name + " and I got:\n"
-    + f1 + " " + team1 + " (Main Team)\n"
-    + f2 + " " + team2 + " (Wild Card)\n\n"
-    + "Good luck everyone! ⚽🏆🌍";
-
-  document.getElementById("whatsapp-btn").addEventListener("click", function () {
-    window.open("https://wa.me/?text=" + encodeURIComponent(message), "_blank");
-  });
-
-  document.getElementById("copy-btn").addEventListener("click", function () {
-    var confirmEl = document.getElementById("copy-confirm");
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(message).then(function () {
-        confirmEl.textContent = "✓ Copied!";
-        setTimeout(function () { confirmEl.textContent = ""; }, 3000);
-      });
-    } else {
-      var ta = document.createElement("textarea");
-      ta.value = message;
-      ta.style.cssText = "position:fixed;opacity:0";
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      confirmEl.textContent = "✓ Copied!";
-      setTimeout(function () { confirmEl.textContent = ""; }, 3000);
-    }
-  });
+  applyTwemoji(document.getElementById("screen-result"));
 }
 
 // ============================================================
@@ -460,6 +421,12 @@ function showError(msg) {
 
 function hideError() {
   document.getElementById("error-msg").classList.add("hidden");
+}
+
+function applyTwemoji(el) {
+  if (typeof twemoji !== "undefined") {
+    twemoji.parse(el, { folder: "svg", ext: ".svg" });
+  }
 }
 
 function shuffle(arr) {

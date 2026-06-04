@@ -206,18 +206,6 @@ select:focus {
 .btn-row { display: flex; gap: 12px; margin-top: 8px; }
 .btn-row .btn { width: 50%; }
 
-.btn-whatsapp { background: #25D366; color: #fff; flex: 2; }
-.btn-whatsapp:hover:not(:disabled) { opacity: 0.9; }
-
-.btn-copy {
-  background: var(--surface2);
-  color: var(--text);
-  border: 1px solid var(--border);
-  flex: 1;
-  font-size: 0.85rem;
-}
-.btn-copy:hover:not(:disabled) { border-color: var(--accent2); }
-
 .btn-back {
   background: transparent;
   border: 1px solid var(--border);
@@ -266,10 +254,10 @@ select:focus {
 }
 
 .confirm-warning {
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent);
   margin-bottom: 20px;
-  font-style: italic;
 }
 
 /* ============================================================
@@ -408,13 +396,7 @@ select:focus {
 .team-name { font-size: 0.85rem; font-weight: 700; color: var(--text); text-align: center; line-height: 1.2; }
 .team-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); }
 
-.good-luck { font-size: 0.95rem; color: var(--success); font-weight: 600; margin-bottom: 8px; }
-
-.share-nudge { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; }
-
-.share-row { display: flex; gap: 10px; margin-bottom: 4px; }
-
-.copy-confirm { font-size: 0.8rem; color: var(--success); min-height: 20px; margin-bottom: 0; }
+.good-luck { font-size: 0.95rem; color: var(--success); font-weight: 600; margin-bottom: 12px; }
 
 /* ============================================================
    Leaderboard
@@ -484,6 +466,25 @@ select:focus {
   color: var(--text-muted);
   font-style: italic;
   padding: 16px 0;
+}
+
+/* ============================================================
+   Twemoji — cross-platform emoji rendering
+   ============================================================ */
+
+img.emoji {
+  height: 1.2em;
+  width: 1.2em;
+  vertical-align: -0.15em;
+  display: inline-block;
+}
+
+.team-flag img.emoji {
+  height: 3rem;
+  width: 3rem;
+  vertical-align: middle;
+  display: block;
+  margin: 0 auto;
 }
 
 /* ============================================================
