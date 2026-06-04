@@ -327,7 +327,9 @@ function seedTeamPool() {
     ["Mexico",        "Uzbekistan"],
     ["Portugal",      "Uzbekistan"],
     ["Uruguay",       "Algeria"],
-    ["Türkiye",       "Paraguay"]
+    ["Türkiye",       "Paraguay"],
+    ["Côte d'Ivoire", "Bosnia and Herzegovina"],
+    ["Mexico",        "Congo DR"]
   ];
 
   pairs = shuffleArray(pairs);
@@ -358,16 +360,16 @@ function seedParticipants() {
   var names = [
     "Akleema", "Blandina", "Dr. Brachmayer", "Dr. Cantrell",
     "Carina", "Cherne", "Claire", "Constance", "Danae", "Dr. Daya",
-    "Dedre", "Ellenor", "Elrentia", "Gail", "Gugu", "Hajra",
-    "Humayra", "Itumeleng", "Kenneth", "Landiwe", "Liza", "Lusanda",
-    "Macdonald", "Mamasita", "Mandy", "Marcelle", "Marizanne",
-    "Martene", "Michael", "Miyelani", "Monare", "Mpho", "Mpumzi",
-    "Nadia", "Nhlanhla", "Ntombizodwa", "Dr. Omar", "Dr. Oren",
-    "Dr. Poyiadji", "Prescious", "Prof Sanyika", "Dr. Rampini",
-    "Refilwe", "Robert", "Samantha", "Shadrack", "Dr. Singh",
-    "Sithembile", "Tamzin", "Dr. Terreblanche", "Thandekile",
-    "Thobeka", "Thomas", "Tshilisanani", "Veli", "Victor",
-    "Yasmeen", "Yerisha", "Yogita", "Zanele"
+    "Dedre", "Ellenor", "Elrentia", "Dr. Gabuza", "Gail", "Gugu",
+    "Dr. Haagensen", "Hajra", "Humayra", "Itumeleng", "Kenneth",
+    "Landiwe", "Liza", "Lusanda", "Macdonald", "Mamasita", "Mandy",
+    "Marcelle", "Marizanne", "Martene", "Michael", "Miyelani",
+    "Monare", "Mpho", "Mpumzi", "Nadia", "Nhlanhla", "Ntombizodwa",
+    "Dr. Omar", "Dr. Oren", "Dr. Poyiadji", "Prescious", "Prof Sanyika",
+    "Dr. Rampini", "Refilwe", "Robert", "Samantha", "Shadrack",
+    "Dr. Singh", "Sithembile", "Tamzin", "Dr. Terreblanche",
+    "Thandekile", "Thobeka", "Thomas", "Tshilisanani", "Veli",
+    "Victor", "Yasmeen", "Yerisha", "Yogita", "Zanele"
   ];
 
   var rows = names.map(function (n) { return [n, "", "", "", ""]; });

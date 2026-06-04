@@ -13,16 +13,16 @@ const SPIN_DURATION_MS = 16000;
 const PARTICIPANTS = [
   "Akleema", "Blandina", "Dr. Brachmayer", "Dr. Cantrell",
   "Carina", "Cherne", "Claire", "Constance", "Danae", "Dr. Daya",
-  "Dedre", "Ellenor", "Elrentia", "Gail", "Gugu", "Hajra",
-  "Humayra", "Itumeleng", "Kenneth", "Landiwe", "Liza", "Lusanda",
-  "Macdonald", "Mamasita", "Mandy", "Marcelle", "Marizanne",
-  "Martene", "Michael", "Miyelani", "Monare", "Mpho", "Mpumzi",
-  "Nadia", "Nhlanhla", "Ntombizodwa", "Dr. Omar", "Dr. Oren",
-  "Dr. Poyiadji", "Prescious", "Prof Sanyika", "Dr. Rampini",
-  "Refilwe", "Robert", "Samantha", "Shadrack", "Dr. Singh",
-  "Sithembile", "Tamzin", "Dr. Terreblanche", "Thandekile",
-  "Thobeka", "Thomas", "Tshilisanani", "Veli", "Victor",
-  "Yasmeen", "Yerisha", "Yogita", "Zanele"
+  "Dedre", "Ellenor", "Elrentia", "Dr. Gabuza", "Gail", "Gugu",
+  "Dr. Haagensen", "Hajra", "Humayra", "Itumeleng", "Kenneth",
+  "Landiwe", "Liza", "Lusanda", "Macdonald", "Mamasita", "Mandy",
+  "Marcelle", "Marizanne", "Martene", "Michael", "Miyelani",
+  "Monare", "Mpho", "Mpumzi", "Nadia", "Nhlanhla", "Ntombizodwa",
+  "Dr. Omar", "Dr. Oren", "Dr. Poyiadji", "Prescious", "Prof Sanyika",
+  "Dr. Rampini", "Refilwe", "Robert", "Samantha", "Shadrack",
+  "Dr. Singh", "Sithembile", "Tamzin", "Dr. Terreblanche",
+  "Thandekile", "Thobeka", "Thomas", "Tshilisanani", "Veli",
+  "Victor", "Yasmeen", "Yerisha", "Yogita", "Zanele"
 ];
 
 // ============================================================
@@ -237,7 +237,7 @@ function updateLeaderboardToggle(participants) {
   var btn = document.getElementById("leaderboard-toggle");
   var label = count === 0
     ? "🏆 View Team Draw Results (no picks yet)"
-    : "🏆 View Team Draw Results (" + count + " of 60 picked)";
+    : "🏆 View Team Draw Results (" + count + " of " + PARTICIPANTS.length + " picked)";
   btn.textContent = label;
 }
 
@@ -302,14 +302,6 @@ function bindBackButton() {
   var btn = document.getElementById("back-home-btn");
   if (btn) {
     btn.addEventListener("click", function () {
-      sessionStorage.removeItem("hasSpun");
-      sessionStorage.removeItem("spinResult");
-      window.location.reload();
-    });
-  }
-  var fresh = document.getElementById("start-fresh-btn");
-  if (fresh) {
-    fresh.addEventListener("click", function () {
       sessionStorage.clear();
       window.location.reload();
     });
@@ -322,6 +314,7 @@ function bindBackButton() {
 
 var ITEM_H = 40;
 var WIN_H = 120;
+var REEL_PAD = 2; // items visible above/below the selected team when stopped
 
 function buildReels() {
   fillReel("reel-strong", null, false);
@@ -337,34 +330,57 @@ function fillReel(reelId, finalTeam, reverse) {
     ? allTeams.filter(function (t) { return t !== finalTeam; })
     : allTeams.slice();
 
-  var items = [];
-  while (items.length < 56) {
-    items = items.concat(shuffle(others.slice()));
+  // 54 random scroll items
+  var randoms = [];
+  while (randoms.length < 54) {
+    randoms = randoms.concat(shuffle(others.slice()));
   }
-  items = items.slice(0, 56);
+  randoms = randoms.slice(0, 54);
+
+  // Padding items that appear above/below the final team
+  var pad = [];
+  while (pad.length < REEL_PAD) {
+    pad = pad.concat(shuffle(others.slice()));
+  }
+  pad = pad.slice(0, REEL_PAD);
+
+  var items;
+  var finalIndex;
 
   if (finalTeam) {
     if (reverse) {
-      items.unshift(finalTeam);
+      // [pad | FINAL | randoms] — reel scrolls DOWN, lands with FINAL centred,
+      // pad items visible above it, randoms below
+      items = pad.concat([finalTeam]).concat(randoms);
+      finalIndex = REEL_PAD;
     } else {
-      items.push(finalTeam);
+      // [randoms | FINAL | pad] — reel scrolls UP, lands with FINAL centred,
+      // randoms visible above it, pad items below
+      items = randoms.concat([finalTeam]).concat(pad);
+      finalIndex = 54;
     }
+  } else {
+    items = randoms.concat(pad);
+    finalIndex = Math.floor(items.length / 2);
   }
 
   items.forEach(function (team, idx) {
     var div = document.createElement("div");
-    var isLanding = finalTeam && (reverse ? idx === 0 : idx === items.length - 1);
-    div.className = "reel-item" + (isLanding ? " reel-landing" : "");
+    div.className = "reel-item" + (finalTeam && idx === finalIndex ? " reel-landing" : "");
     div.textContent = team;
     reel.appendChild(div);
   });
 
-  var centre = (WIN_H / 2) - (ITEM_H / 2);
+  // Store finalIndex so runSpinAnimation knows the exact target
+  reel.dataset.finalIndex = String(finalIndex);
+
+  var centre = (WIN_H / 2) - (ITEM_H / 2); // 40px
   reel.style.transition = "none";
 
   if (reverse) {
-    var startY = -((items.length - 1) * ITEM_H) + centre;
-    reel.style.transform = "translateY(" + startY + "px)";
+    // Start near the bottom so it scrolls visibly downward toward FINAL
+    var startIdx = items.length - 2;
+    reel.style.transform = "translateY(" + (-(startIdx * ITEM_H) + centre) + "px)";
   } else {
     reel.style.transform = "translateY(0)";
   }
@@ -430,24 +446,20 @@ function runSpinAnimation(onComplete) {
   var reelWeak   = document.getElementById("reel-weak");
   var centre = (WIN_H / 2) - (ITEM_H / 2);
 
-  function animateNormal(reel) {
-    var n = reel.children.length;
-    var targetY = -((n - 1) * ITEM_H) + centre;
+  function animateReel(reel, reverse) {
+    var finalIndex = parseInt(reel.dataset.finalIndex, 10);
+    var targetY = -(finalIndex * ITEM_H) + centre;
+    var duration = reverse ? (SPIN_DURATION_MS * 0.85) / 1000 : SPIN_DURATION_MS / 1000;
+    var easing   = reverse
+      ? "cubic-bezier(0.08, 0.92, 0.32, 1.0)"
+      : "cubic-bezier(0.12, 0.88, 0.4, 1.0)";
     reel.getBoundingClientRect();
-    reel.style.transition = "transform " + (SPIN_DURATION_MS / 1000) + "s cubic-bezier(0.12, 0.88, 0.4, 1.0)";
+    reel.style.transition = "transform " + duration + "s " + easing;
     reel.style.transform = "translateY(" + targetY + "px)";
   }
 
-  function animateReverse(reel) {
-    var duration = (SPIN_DURATION_MS * 0.85) / 1000;
-    var targetY = centre;
-    reel.getBoundingClientRect();
-    reel.style.transition = "transform " + duration + "s cubic-bezier(0.08, 0.92, 0.32, 1.0)";
-    reel.style.transform = "translateY(" + targetY + "px)";
-  }
-
-  animateNormal(reelStrong);
-  setTimeout(function () { animateReverse(reelWeak); }, 120);
+  animateReel(reelStrong, false);
+  setTimeout(function () { animateReel(reelWeak, true); }, 120);
   setTimeout(onComplete, SPIN_DURATION_MS + 400);
 }
 
