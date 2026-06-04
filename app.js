@@ -1,14 +1,13 @@
 // ============================================================
-// FIFA 2026 Sweepstakes — Frontend
+// DGMC FIFA 2026 Sweepstakes — Frontend
 // ============================================================
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz19-L4XRtXoTyF6SbvSG0iRxzD28it3kNmBkCZlDCZjzx_jZhhywihaHvhQxVuOuBg/exec";
 const REMOVE_CLAIMED_NAMES = true;
 const SPIN_DURATION_MS = 4000;
-const APP_TITLE = "DGMC FIFA 2026 Sweepstakes";
 
 // ============================================================
-// PARTICIPANT NAMES — edit this list if needed
+// PARTICIPANTS
 // ============================================================
 
 const PARTICIPANTS = [
@@ -27,36 +26,34 @@ const PARTICIPANTS = [
 ];
 
 // ============================================================
-// FLAG EMOJIS — maps every team name to its flag emoji
+// FLAG EMOJIS
 // ============================================================
 
 const TEAM_FLAGS = {
-  // Strong teams
-  "Argentina":      "🇦🇷",
-  "Brazil":         "🇧🇷",
-  "France":         "🇫🇷",
-  "Spain":          "🇪🇸",
-  "England":        "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-  "Germany":        "🇩🇪",
-  "Portugal":       "🇵🇹",
-  "Netherlands":    "🇳🇱",
-  "Belgium":        "🇧🇪",
-  "Croatia":        "🇭🇷",
-  "Uruguay":        "🇺🇾",
-  "Morocco":        "🇲🇦",
-  "Colombia":       "🇨🇴",
-  "Switzerland":    "🇨🇭",
-  "Mexico":         "🇲🇽",
-  "United States":  "🇺🇸",
-  "Japan":          "🇯🇵",
-  "South Korea":    "🇰🇷",
-  "Senegal":        "🇸🇳",
-  "Norway":         "🇳🇴",
-  "Sweden":         "🇸🇪",
-  "Austria":        "🇦🇹",
-  "Türkiye":        "🇹🇷",
-  "Côte d'Ivoire":  "🇨🇮",
-  // Weak / underdog teams
+  "Argentina":              "🇦🇷",
+  "Brazil":                 "🇧🇷",
+  "France":                 "🇫🇷",
+  "Spain":                  "🇪🇸",
+  "England":                "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+  "Germany":                "🇩🇪",
+  "Portugal":               "🇵🇹",
+  "Netherlands":            "🇳🇱",
+  "Belgium":                "🇧🇪",
+  "Croatia":                "🇭🇷",
+  "Uruguay":                "🇺🇾",
+  "Morocco":                "🇲🇦",
+  "Colombia":               "🇨🇴",
+  "Switzerland":            "🇨🇭",
+  "Mexico":                 "🇲🇽",
+  "United States":          "🇺🇸",
+  "Japan":                  "🇯🇵",
+  "South Korea":            "🇰🇷",
+  "Senegal":                "🇸🇳",
+  "Norway":                 "🇳🇴",
+  "Sweden":                 "🇸🇪",
+  "Austria":                "🇦🇹",
+  "Türkiye":                "🇹🇷",
+  "Côte d'Ivoire":          "🇨🇮",
   "Jordan":                 "🇯🇴",
   "Uzbekistan":             "🇺🇿",
   "Curaçao":                "🇨🇼",
@@ -87,24 +84,34 @@ const TEAM_FLAGS = {
 // STATE
 // ============================================================
 
-let selectedName = null;
-let pendingPair = null; // { pairId, strongTeam, weakTeam }
+var selectedName = null;
 
 // ============================================================
 // INIT
 // ============================================================
 
 document.addEventListener("DOMContentLoaded", function () {
+  // Session recovery — show result again if already spun this session
   if (sessionStorage.getItem("hasSpun")) {
-    showScreen("screen-done");
+    var stored = sessionStorage.getItem("spinResult");
+    if (stored) {
+      var result = JSON.parse(stored);
+      showResult(result.name, result.team1, result.team2, true);
+    } else {
+      document.getElementById("result-greeting").textContent = "You've already spun your teams!";
+      document.getElementById("result-good-luck").textContent = "Your teams have been recorded. Contact the organiser if you need a reminder.";
+      showScreen("screen-result");
+    }
+    bindBackButton();
     return;
   }
+
   loadState();
   bindEvents();
 });
 
 // ============================================================
-// LOAD STATE — fetch claimed names from Apps Script
+// LOAD STATE
 // ============================================================
 
 function loadState() {
@@ -119,32 +126,29 @@ function loadState() {
         return;
       }
       populateDropdown(data.participants);
+      populateLeaderboard(data.participants);
+      updateLeaderboardToggle(data.participants);
     })
     .catch(function () {
       showLoading(false);
-      showError("Network error. Please check your connection and refresh the page.");
+      showError("Network error. Please check your connection and refresh.");
     });
 }
 
 // ============================================================
-// POPULATE DROPDOWN
+// DROPDOWN
 // ============================================================
 
 function populateDropdown(participants) {
   var select = document.getElementById("name-select");
-
-  // Build a lookup of claimed names
   var claimed = {};
   participants.forEach(function (p) {
     if (p.claimed) claimed[p.name] = true;
   });
 
-  // Use the local PARTICIPANTS array for ordering, then apply claimed status
   PARTICIPANTS.forEach(function (name) {
     var isClaimed = !!claimed[name];
-
-    if (REMOVE_CLAIMED_NAMES && isClaimed) return; // skip claimed names
-
+    if (REMOVE_CLAIMED_NAMES && isClaimed) return;
     var opt = document.createElement("option");
     opt.value = name;
     opt.textContent = name + (isClaimed ? " (taken)" : "");
@@ -154,14 +158,49 @@ function populateDropdown(participants) {
 }
 
 // ============================================================
+// LEADERBOARD
+// ============================================================
+
+function populateLeaderboard(participants) {
+  var body = document.getElementById("leaderboard-body");
+  var claimed = participants.filter(function (p) { return p.claimed && p.team1; });
+
+  if (claimed.length === 0) {
+    body.innerHTML = '<p class="lb-empty">No picks yet — be the first!</p>';
+    return;
+  }
+
+  var html = "";
+  claimed.forEach(function (p) {
+    var f1 = TEAM_FLAGS[p.team1] || "🏳";
+    var f2 = TEAM_FLAGS[p.team2] || "🏳";
+    html += '<div class="lb-row">'
+      + '<span class="lb-team-cell">' + f1 + ' ' + p.team1 + '</span>'
+      + '<span class="lb-name-col">' + p.name + '</span>'
+      + '<span class="lb-team-cell right">' + p.team2 + ' ' + f2 + '</span>'
+      + '</div>';
+  });
+
+  body.innerHTML = html;
+}
+
+function updateLeaderboardToggle(participants) {
+  var count = participants.filter(function (p) { return p.claimed; }).length;
+  var btn = document.getElementById("leaderboard-toggle");
+  var label = count === 0
+    ? "🏆 View Leaderboard — no picks yet"
+    : "🏆 View Leaderboard — " + count + " of 60 picked";
+  btn.textContent = label;
+}
+
+// ============================================================
 // EVENTS
 // ============================================================
 
 function bindEvents() {
   document.getElementById("name-select").addEventListener("change", function () {
-    var val = this.value;
-    document.getElementById("spin-btn").disabled = !val;
-    selectedName = val || null;
+    selectedName = this.value || null;
+    document.getElementById("spin-btn").disabled = !selectedName;
     hideError();
   });
 
@@ -176,80 +215,81 @@ function bindEvents() {
   });
 
   document.getElementById("confirm-btn").addEventListener("click", function () {
-    fetchNextPair();
+    buildReels();
+    showScreen("screen-spin");
   });
 
   document.getElementById("do-spin-btn").addEventListener("click", function () {
     this.disabled = true;
     runSpinAnimation();
   });
+
+  document.getElementById("leaderboard-toggle").addEventListener("click", function () {
+    var panel = document.getElementById("leaderboard-panel");
+    var isHidden = panel.classList.contains("hidden");
+    panel.classList.toggle("hidden");
+    // Keep count text, just update the toggle label direction
+    var currentText = this.textContent;
+    if (isHidden) {
+      this.textContent = currentText.replace("View", "Hide");
+    } else {
+      this.textContent = currentText.replace("Hide", "View");
+    }
+  });
+
+  bindBackButton();
 }
 
-// ============================================================
-// FETCH NEXT PAIR — called on confirm, before spin screen
-// ============================================================
-
-function fetchNextPair() {
-  showLoading(true);
-
-  fetch(SCRIPT_URL + "?action=getNextPair")
-    .then(function (res) { return res.json(); })
-    .then(function (data) {
-      showLoading(false);
-      if (!data.success) {
-        showScreen("screen-landing");
-        showError("No pairs remaining — the sweepstakes is full!");
-        return;
-      }
-      pendingPair = { pairId: data.pairId, strongTeam: data.strongTeam, weakTeam: data.weakTeam };
-      buildReels();
-      showScreen("screen-spin");
-    })
-    .catch(function () {
-      showLoading(false);
-      showScreen("screen-landing");
-      showError("Network error. Please try again.");
+function bindBackButton() {
+  var btn = document.getElementById("back-home-btn");
+  if (btn) {
+    btn.addEventListener("click", function () {
+      // Clear session so they land on the home screen (not the already-spun screen)
+      sessionStorage.removeItem("hasSpun");
+      sessionStorage.removeItem("spinResult");
+      window.location.reload();
     });
+  }
 }
 
 // ============================================================
-// BUILD REELS — fill slot machine with shuffled team names
+// BUILD REELS — pure theater, actual teams assigned server-side
 // ============================================================
 
 function buildReels() {
-  var allTeams = Object.keys(TEAM_FLAGS);
-
-  buildReel("reel-strong", allTeams, pendingPair.strongTeam);
-  buildReel("reel-weak", allTeams, pendingPair.weakTeam);
+  buildReel("reel-strong", false);
+  buildReel("reel-weak", true);
 }
 
-function buildReel(reelId, allTeams, finalTeam) {
+function buildReel(reelId, reverse) {
   var reel = document.getElementById(reelId);
   reel.innerHTML = "";
 
-  // Build a long list of shuffled teams ending on the target
-  var shuffled = shuffle(allTeams.slice());
-  // Remove the final team from shuffle so we can append it at the end
-  shuffled = shuffled.filter(function (t) { return t !== finalTeam; });
-
-  // Repeat enough items to fill the animation scroll (about 60 items)
+  var allTeams = Object.keys(TEAM_FLAGS);
   var items = [];
-  while (items.length < 56) {
-    items = items.concat(shuffle(shuffled.slice()));
+  while (items.length < 60) {
+    items = items.concat(shuffle(allTeams.slice()));
   }
-  items = items.slice(0, 56);
-  items.push(finalTeam); // final item — where the reel lands
+  items = items.slice(0, 60);
 
-  items.forEach(function (team, idx) {
+  items.forEach(function (team) {
     var div = document.createElement("div");
-    div.className = "reel-item" + (idx === items.length - 1 ? " highlight" : "");
+    div.className = "reel-item";
     div.textContent = team;
     reel.appendChild(div);
   });
 
-  // Reset position to top
+  var ITEM_H = 40;
+  var WIN_H = 120;
+  var centre = (WIN_H / 2) - (ITEM_H / 2);
+
   reel.style.transition = "none";
-  reel.style.transform = "translateY(0)";
+  if (reverse) {
+    var startY = -((items.length - 1) * ITEM_H) + centre;
+    reel.style.transform = "translateY(" + startY + "px)";
+  } else {
+    reel.style.transform = "translateY(0)";
+  }
 }
 
 // ============================================================
@@ -260,28 +300,36 @@ function runSpinAnimation() {
   var reelStrong = document.getElementById("reel-strong");
   var reelWeak = document.getElementById("reel-weak");
 
-  var itemHeight = 40; // matches .reel-item height in CSS
-  var windowHeight = 120; // matches .spinner-window height in CSS
-  var centreOffset = (windowHeight / 2) - (itemHeight / 2); // 40px
+  var ITEM_H = 40;
+  var WIN_H = 120;
+  var centre = (WIN_H / 2) - (ITEM_H / 2);
 
-  function animateReel(reel) {
-    var totalItems = reel.children.length;
-    // Land the last item (index totalItems-1) centred in the window
-    var targetY = -((totalItems - 1) * itemHeight) + centreOffset;
-
-    // Force reflow to ensure transition: none has taken effect
+  // Normal: scrolls upward, snappy deceleration
+  function animateNormal(reel) {
+    var n = reel.children.length;
+    var stopAt = Math.floor(n * 0.55) + Math.floor(Math.random() * 8);
+    var targetY = -(stopAt * ITEM_H) + centre;
     reel.getBoundingClientRect();
-
-    reel.style.transition = "transform " + (SPIN_DURATION_MS / 1000) + "s cubic-bezier(0.15, 0.85, 0.45, 1.0)";
+    reel.style.transition = "transform " + (SPIN_DURATION_MS / 1000) + "s cubic-bezier(0.12, 0.88, 0.4, 1.0)";
     reel.style.transform = "translateY(" + targetY + "px)";
   }
 
-  animateReel(reelStrong);
-  animateReel(reelWeak);
+  // Reverse: scrolls downward, slightly faster, different easing
+  function animateReverse(reel) {
+    var n = reel.children.length;
+    var stopAt = Math.floor(n * 0.38) - Math.floor(Math.random() * 8);
+    if (stopAt < 5) stopAt = 5;
+    var targetY = -(stopAt * ITEM_H) + centre;
+    var duration = (SPIN_DURATION_MS * 0.85) / 1000;
+    reel.getBoundingClientRect();
+    reel.style.transition = "transform " + duration + "s cubic-bezier(0.08, 0.92, 0.32, 1.0)";
+    reel.style.transform = "translateY(" + targetY + "px)";
+  }
 
-  setTimeout(function () {
-    submitClaim();
-  }, SPIN_DURATION_MS + 200);
+  animateNormal(reelStrong);
+  setTimeout(function () { animateReverse(reelWeak); }, 120);
+
+  setTimeout(function () { submitClaim(); }, SPIN_DURATION_MS + 300);
 }
 
 // ============================================================
@@ -290,37 +338,33 @@ function runSpinAnimation() {
 
 function submitClaim() {
   showLoading(true);
-
-  // Set session flag immediately so a crash/reload doesn't allow a re-spin
   sessionStorage.setItem("hasSpun", "1");
-
-  var payload = {
-    action: "claim",
-    name: selectedName,
-    team1: pendingPair.strongTeam,
-    team2: pendingPair.weakTeam,
-    pairId: pendingPair.pairId
-  };
 
   fetch(SCRIPT_URL, {
     method: "POST",
-    body: JSON.stringify(payload)
+    body: JSON.stringify({ action: "claim", name: selectedName })
   })
     .then(function (res) { return res.json(); })
     .then(function (data) {
       showLoading(false);
       if (!data.success) {
+        sessionStorage.removeItem("hasSpun");
         showScreen("screen-landing");
-        showError("Error recording your teams: " + data.error + " Please contact the organiser.");
+        showError("Could not record your teams: " + data.error);
         return;
       }
-      showResult(data.team1, data.team2);
+      sessionStorage.setItem("spinResult", JSON.stringify({
+        name: data.name,
+        team1: data.team1,
+        team2: data.team2
+      }));
+      showResult(data.name, data.team1, data.team2, false);
     })
     .catch(function () {
       showLoading(false);
-      // Even on network error, show the result — the sessionStorage flag is set
-      // so the pair is effectively used on this device
-      showResult(pendingPair.strongTeam, pendingPair.weakTeam);
+      sessionStorage.removeItem("hasSpun");
+      showScreen("screen-landing");
+      showError("Network error. Please try again or contact the organiser.");
     });
 }
 
@@ -328,53 +372,61 @@ function submitClaim() {
 // SHOW RESULT
 // ============================================================
 
-function showResult(team1, team2) {
+function showResult(name, team1, team2, isRecovery) {
+  var greeting = isRecovery
+    ? "Welcome back, " + name + "! Here are your teams again."
+    : "Hey " + name + ", here are your teams! 🎉";
+
+  document.getElementById("result-greeting").textContent = greeting;
   document.getElementById("result-flag-strong").textContent = TEAM_FLAGS[team1] || "🏳";
   document.getElementById("result-name-strong").textContent = team1;
   document.getElementById("result-flag-weak").textContent = TEAM_FLAGS[team2] || "🏳";
   document.getElementById("result-name-weak").textContent = team2;
+
+  if (isRecovery) {
+    document.getElementById("result-good-luck").textContent = "Your teams are locked in — good luck! 🏆";
+  }
+
   showScreen("screen-result");
-  bindShareButtons(team1, team2);
+  bindShareButtons(name, team1, team2);
 }
 
 // ============================================================
-// SHARE BUTTONS
+// SHARE
 // ============================================================
 
-function bindShareButtons(team1, team2) {
-  var flag1 = TEAM_FLAGS[team1] || "🏳";
-  var flag2 = TEAM_FLAGS[team2] || "🏳";
+function bindShareButtons(name, team1, team2) {
+  var f1 = TEAM_FLAGS[team1] || "🏳";
+  var f2 = TEAM_FLAGS[team2] || "🏳";
 
   var message = "🏆 DGMC FIFA 2026 Sweepstakes\n\n"
-    + selectedName + " got:\n"
-    + flag1 + " " + team1 + " (Strong Pick)\n"
-    + flag2 + " " + team2 + " (Wild Card)\n\n"
-    + "Good luck to everyone! ⚽";
+    + "I just drew my World Cup teams!\n\n"
+    + "I'm " + name + " and I got:\n"
+    + f1 + " " + team1 + " (Main Team)\n"
+    + f2 + " " + team2 + " (Wild Card)\n\n"
+    + "Good luck everyone! ⚽🏆🌍";
 
   document.getElementById("whatsapp-btn").addEventListener("click", function () {
-    var url = "https://wa.me/?text=" + encodeURIComponent(message);
-    window.open(url, "_blank");
+    window.open("https://wa.me/?text=" + encodeURIComponent(message), "_blank");
   });
 
   document.getElementById("copy-btn").addEventListener("click", function () {
-    var confirm = document.getElementById("copy-confirm");
+    var confirmEl = document.getElementById("copy-confirm");
     if (navigator.clipboard) {
       navigator.clipboard.writeText(message).then(function () {
-        confirm.textContent = "✓ Copied to clipboard!";
-        setTimeout(function () { confirm.textContent = ""; }, 3000);
+        confirmEl.textContent = "✓ Copied!";
+        setTimeout(function () { confirmEl.textContent = ""; }, 3000);
       });
     } else {
-      // Fallback for older browsers
       var ta = document.createElement("textarea");
       ta.value = message;
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
+      ta.style.cssText = "position:fixed;opacity:0";
       document.body.appendChild(ta);
       ta.select();
       document.execCommand("copy");
       document.body.removeChild(ta);
-      confirm.textContent = "✓ Copied to clipboard!";
-      setTimeout(function () { confirm.textContent = ""; }, 3000);
+      confirmEl.textContent = "✓ Copied!";
+      setTimeout(function () { confirmEl.textContent = ""; }, 3000);
     }
   });
 }
@@ -391,15 +443,12 @@ function showScreen(id) {
   var target = document.getElementById(id);
   target.classList.remove("hidden");
   target.classList.add("active");
+  window.scrollTo(0, 0);
 }
 
 function showLoading(visible) {
   var el = document.getElementById("loading");
-  if (visible) {
-    el.classList.remove("hidden");
-  } else {
-    el.classList.add("hidden");
-  }
+  visible ? el.classList.remove("hidden") : el.classList.add("hidden");
 }
 
 function showError(msg) {
@@ -411,10 +460,6 @@ function showError(msg) {
 function hideError() {
   document.getElementById("error-msg").classList.add("hidden");
 }
-
-// ============================================================
-// UTILITIES
-// ============================================================
 
 function shuffle(arr) {
   for (var i = arr.length - 1; i > 0; i--) {

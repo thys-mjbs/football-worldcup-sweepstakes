@@ -1,6 +1,6 @@
 /* ============================================================
-   FIFA 2026 Sweepstakes — Mobile-first styles
-   Base breakpoint: 390px (iPhone 14)
+   DGMC FIFA 2026 Sweepstakes — Styles
+   Mobile-first, base: 390px
    ============================================================ */
 
 *, *::before, *::after {
@@ -23,8 +23,8 @@
   --radius-sm: 8px;
 }
 
-html, body {
-  height: 100%;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -35,8 +35,8 @@ body {
   line-height: 1.5;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   padding: 16px;
 }
 
@@ -44,16 +44,22 @@ body {
    Screens
    ============================================================ */
 
-.screen {
-  width: 100%;
-  max-width: 480px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.screen { display: none; width: 100%; max-width: 480px; }
+.screen.active { display: flex; flex-direction: column; align-items: center; }
+.screen.hidden { display: none; }
+
+/* Landing screen — scrollable column */
+.screen-landing {
+  padding-top: 16px;
+  padding-bottom: 40px;
+  gap: 12px;
 }
 
-.screen.hidden { display: none; }
-.screen.active { display: flex; }
+/* Other screens — vertically centred */
+.screen-centered {
+  min-height: calc(100vh - 32px);
+  justify-content: center;
+}
 
 /* ============================================================
    Card
@@ -69,6 +75,10 @@ body {
   box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
 
+/* ============================================================
+   Brand
+   ============================================================ */
+
 .brand-logo {
   width: 52px;
   height: auto;
@@ -80,10 +90,14 @@ body {
   margin-bottom: 8px;
 }
 
+/* ============================================================
+   Typography
+   ============================================================ */
+
 h1 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   color: var(--text);
   line-height: 1.3;
 }
@@ -91,7 +105,21 @@ h1 {
 h2 {
   font-size: 1.3rem;
   font-weight: 700;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+}
+
+h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--accent2);
+  text-align: center;
+}
+
+p {
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  font-size: 0.95rem;
 }
 
 .tagline {
@@ -101,24 +129,18 @@ h2 {
   margin-bottom: 8px;
 }
 
-p {
-  color: var(--text-muted);
-  margin-bottom: 16px;
-  font-size: 0.95rem;
-}
-
 /* ============================================================
    Form
    ============================================================ */
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   text-align: left;
 }
 
 label {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-muted);
   margin-bottom: 8px;
@@ -136,7 +158,7 @@ select {
   font-size: 1rem;
   appearance: none;
   -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238888a8' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237BA8C4' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 16px center;
   cursor: pointer;
@@ -145,11 +167,7 @@ select {
 
 select:focus {
   outline: none;
-  border-color: var(--accent);
-}
-
-select option:disabled {
-  color: var(--text-muted);
+  border-color: var(--accent2);
 }
 
 /* ============================================================
@@ -173,11 +191,7 @@ select option:disabled {
 .btn:active { transform: scale(0.98); }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-.btn-primary {
-  background: var(--accent);
-  color: #fff;
-}
-
+.btn-primary { background: var(--accent); color: #fff; }
 .btn-primary:hover:not(:disabled) { opacity: 0.9; }
 
 .btn-secondary {
@@ -185,26 +199,37 @@ select option:disabled {
   color: var(--text);
   border: 1px solid var(--border);
 }
+.btn-secondary:hover:not(:disabled) { border-color: var(--accent2); }
 
-.btn-secondary:hover:not(:disabled) { border-color: var(--accent); }
+.btn-large { font-size: 1.15rem; padding: 18px 24px; min-height: 56px; }
 
-.btn-large {
-  font-size: 1.15rem;
-  padding: 18px 24px;
-  min-height: 56px;
-  letter-spacing: 0.05em;
-}
-
-.btn-row {
-  display: flex;
-  gap: 12px;
-  margin-top: 8px;
-}
-
+.btn-row { display: flex; gap: 12px; margin-top: 8px; }
 .btn-row .btn { width: 50%; }
 
+.btn-whatsapp { background: #25D366; color: #fff; flex: 2; }
+.btn-whatsapp:hover:not(:disabled) { opacity: 0.9; }
+
+.btn-copy {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  flex: 1;
+  font-size: 0.85rem;
+}
+.btn-copy:hover:not(:disabled) { border-color: var(--accent2); }
+
+.btn-back {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 12px;
+  font-weight: 600;
+}
+.btn-back:hover { border-color: var(--accent2); color: var(--text); }
+
 /* ============================================================
-   Error / Info messages
+   Error
    ============================================================ */
 
 .error {
@@ -212,9 +237,9 @@ select option:disabled {
   font-size: 0.9rem;
   margin-bottom: 12px;
   padding: 10px 14px;
-  background: rgba(233,69,96,0.1);
+  background: rgba(245,166,35,0.1);
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(233,69,96,0.3);
+  border: 1px solid rgba(245,166,35,0.3);
 }
 
 .hidden { display: none !important; }
@@ -223,27 +248,49 @@ select option:disabled {
    Confirmation screen
    ============================================================ */
 
-.confirm-icon {
-  font-size: 2.5rem;
-  margin-bottom: 12px;
+.confirm-icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+.confirm-intro {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.confirm-name-display {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 16px;
+  line-height: 1.2;
 }
 
 .confirm-warning {
   font-size: 0.85rem;
-  color: var(--accent);
-  margin-bottom: 24px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  font-style: italic;
 }
 
 /* ============================================================
-   Spinner / Slot machine
+   Spin screen
    ============================================================ */
+
+.spin-instruction {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  margin-top: -4px;
+}
+
+.spin-instruction strong { color: var(--accent); }
 
 .spinners-row {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin: 24px 0;
+  margin: 20px 0;
 }
 
 .spinner-col {
@@ -255,7 +302,7 @@ select option:disabled {
 }
 
 .spinner-label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -276,18 +323,15 @@ select option:disabled {
 .spinner-window::after {
   content: '';
   position: absolute;
-  left: 0;
-  right: 0;
-  height: 30px;
+  left: 0; right: 0;
+  height: 32px;
   z-index: 2;
   pointer-events: none;
 }
-
 .spinner-window::before {
   top: 0;
   background: linear-gradient(to bottom, var(--surface2), transparent);
 }
-
 .spinner-window::after {
   bottom: 0;
   background: linear-gradient(to top, var(--surface2), transparent);
@@ -316,13 +360,8 @@ select option:disabled {
   text-align: center;
 }
 
-.reel-item.highlight {
-  color: var(--accent);
-  font-size: 0.9rem;
-}
-
 .vs-divider {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 900;
   color: var(--text-muted);
   flex-shrink: 0;
@@ -333,10 +372,17 @@ select option:disabled {
    Result screen
    ============================================================ */
 
+.result-greeting {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent2);
+  margin-bottom: 16px;
+}
+
 .teams-row {
   display: flex;
   gap: 12px;
-  margin: 24px 0;
+  margin-bottom: 16px;
 }
 
 .team-card {
@@ -351,7 +397,6 @@ select option:disabled {
   gap: 8px;
   animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
-
 .team-card:nth-child(2) { animation-delay: 0.15s; }
 
 @keyframes popIn {
@@ -359,63 +404,86 @@ select option:disabled {
   to   { opacity: 1; transform: scale(1); }
 }
 
-.team-flag {
-  font-size: 3rem;
-  line-height: 1;
-}
+.team-flag { font-size: 3rem; line-height: 1; }
+.team-name { font-size: 0.85rem; font-weight: 700; color: var(--text); text-align: center; line-height: 1.2; }
+.team-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); }
 
-.team-name {
-  font-size: 0.85rem;
+.good-luck { font-size: 0.95rem; color: var(--success); font-weight: 600; margin-bottom: 8px; }
+
+.share-nudge { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; }
+
+.share-row { display: flex; gap: 10px; margin-bottom: 4px; }
+
+.copy-confirm { font-size: 0.8rem; color: var(--success); min-height: 20px; margin-bottom: 0; }
+
+/* ============================================================
+   Leaderboard
+   ============================================================ */
+
+.leaderboard-toggle {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--accent2);
   font-weight: 700;
-  color: var(--text);
+  font-size: 0.95rem;
+  padding: 14px 16px;
+  cursor: pointer;
   text-align: center;
-  line-height: 1.2;
+  min-height: 48px;
+  transition: border-color 0.15s;
+}
+.leaderboard-toggle:hover { border-color: var(--accent2); }
+
+.leaderboard-panel {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 16px;
 }
 
-.team-label {
+.lb-table { width: 100%; }
+
+.lb-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 6px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8rem;
+  align-items: center;
+}
+.lb-row:last-child { border-bottom: none; }
+
+.lb-header {
+  font-weight: 700;
+  color: var(--text-muted);
   font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  padding-bottom: 10px;
 }
 
-.good-luck {
-  font-size: 1rem;
-  color: var(--success);
-  font-weight: 600;
-  margin-top: 8px;
-  margin-bottom: 20px;
-}
-
-.share-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 4px;
-}
-
-.btn-whatsapp {
-  background: #25D366;
-  color: #fff;
-  flex: 2;
-}
-
-.btn-whatsapp:hover:not(:disabled) { opacity: 0.9; }
-
-.btn-copy {
-  background: var(--surface2);
-  color: var(--text);
-  border: 1px solid var(--border);
-  flex: 1;
+.lb-name-col {
+  text-align: center;
+  font-weight: 700;
+  color: var(--accent);
   font-size: 0.85rem;
+  padding: 0 8px;
 }
 
-.btn-copy:hover:not(:disabled) { border-color: var(--accent2); }
+.lb-right { text-align: right; }
 
-.copy-confirm {
-  font-size: 0.8rem;
-  color: var(--success);
-  margin-top: 8px;
-  min-height: 20px;
+.lb-team-cell { color: var(--text); font-size: 0.78rem; }
+.lb-team-cell.right { text-align: right; }
+
+.lb-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 16px 0;
 }
 
 /* ============================================================
@@ -425,7 +493,7 @@ select option:disabled {
 .loading {
   position: fixed;
   inset: 0;
-  background: rgba(15,15,26,0.85);
+  background: rgba(13,33,55,0.88);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -441,20 +509,19 @@ select option:disabled {
   animation: spin 0.7s linear infinite;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ============================================================
-   Responsive — larger screens
+   Responsive — 600px+
    ============================================================ */
 
 @media (min-width: 600px) {
-  .card { padding: 40px 36px; }
-  h1 { font-size: 1.75rem; }
-  .brand-logo { width: 72px; }
+  .card { padding: 36px 32px; }
+  h1 { font-size: 1.6rem; }
+  .brand-logo { width: 68px; }
   .trophy { font-size: 2.5rem; }
   .team-flag { font-size: 3.5rem; }
   .team-name { font-size: 0.95rem; }
-  .reel-item { font-size: 0.9rem; }
+  .reel-item { font-size: 0.85rem; }
+  .confirm-name-display { font-size: 1.8rem; }
 }

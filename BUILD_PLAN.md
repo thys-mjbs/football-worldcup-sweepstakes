@@ -104,7 +104,7 @@ All of this is done in the Apps Script editor (browser).
 
 - [ ] **7.1** Push all files (`index.html`, `style.css`, `app.js`, `apps-script/Code.gs`) to `main` branch. Verify GitHub Pages serves the site.
 - [ ] **7.2** Replace `YOUR_APPS_SCRIPT_URL_HERE` in `app.js` with the real deployed Apps Script URL. Push.
-- [ ] **7.3** From Apps Script editor: run `seedTeamPool()` manually. Confirm 60 rows appear in the TeamPool sheet.
+- [x] **7.3** From Apps Script editor: run `seedTeamPool()` manually. Confirm 60 rows appear in the TeamPool sheet.
 - [ ] **7.4** Test `getState` — open `[SCRIPT_URL]?action=getState` in browser. Confirm valid JSON with 60 names and 60 remaining pairs.
 - [ ] **7.5** Test `getNextPair` — open `[SCRIPT_URL]?action=getNextPair` in browser. Confirm valid JSON with a pair.
 - [ ] **7.6** Full end-to-end test (desktop): select a name → confirm → spin → reveal → check that `thysja@gmail.com` received the email → check that Participants and AdminLog sheets updated correctly.

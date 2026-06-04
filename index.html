@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#1a1a2e" />
+  <meta name="theme-color" content="#0D2137" />
   <title>DGMC FIFA 2026 Sweepstakes</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="style.css" />
@@ -16,7 +16,7 @@
   </div>
 
   <!-- Screen 1: Landing -->
-  <div id="screen-landing" class="screen active">
+  <div id="screen-landing" class="screen screen-landing active">
     <div class="card">
       <img src="DGMC_Logo.png" alt="DGMC Radiology" class="brand-logo" />
       <div class="trophy">🏆</div>
@@ -32,14 +32,29 @@
       <p id="error-msg" class="error hidden"></p>
       <button id="spin-btn" class="btn btn-primary" disabled>Let's Spin!</button>
     </div>
+
+    <button id="leaderboard-toggle" class="leaderboard-toggle">🏆 View Leaderboard</button>
+
+    <div id="leaderboard-panel" class="leaderboard-panel hidden">
+      <h3>Who's got what?</h3>
+      <div class="lb-table">
+        <div class="lb-row lb-header">
+          <span>Main Team</span>
+          <span class="lb-name-col">Name</span>
+          <span class="lb-right">Wild Card</span>
+        </div>
+        <div id="leaderboard-body"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- Screen 2: Confirmation modal -->
-  <div id="screen-confirm" class="screen hidden">
+  <!-- Screen 2: Confirmation -->
+  <div id="screen-confirm" class="screen screen-centered hidden">
     <div class="card">
       <div class="confirm-icon">👤</div>
       <h2>Are you sure?</h2>
-      <p>You selected <strong id="confirm-name"></strong>.</p>
+      <p class="confirm-intro">You selected:</p>
+      <p class="confirm-name-display" id="confirm-name"></p>
       <p class="confirm-warning">Make sure this is your name. Once you spin, your teams are locked in and cannot be changed.</p>
       <div class="btn-row">
         <button id="goback-btn" class="btn btn-secondary">Go Back</button>
@@ -49,12 +64,13 @@
   </div>
 
   <!-- Screen 3: Spin -->
-  <div id="screen-spin" class="screen hidden">
+  <div id="screen-spin" class="screen screen-centered hidden">
     <div class="card">
       <h2>Your teams await…</h2>
+      <p class="spin-instruction">👇 Tap <strong>SPIN</strong> to reveal your two teams!</p>
       <div class="spinners-row">
         <div class="spinner-col">
-          <div class="spinner-label">Strong Pick</div>
+          <div class="spinner-label">Main Team</div>
           <div class="spinner-window">
             <div id="reel-strong" class="reel"></div>
           </div>
@@ -72,14 +88,14 @@
   </div>
 
   <!-- Screen 4: Result -->
-  <div id="screen-result" class="screen hidden">
+  <div id="screen-result" class="screen screen-centered hidden">
     <div class="card">
-      <h2>Your Teams Are…</h2>
+      <p id="result-greeting" class="result-greeting"></p>
       <div class="teams-row">
         <div class="team-card">
           <div class="team-flag" id="result-flag-strong"></div>
           <div class="team-name" id="result-name-strong"></div>
-          <div class="team-label">Strong Pick</div>
+          <div class="team-label">Main Team</div>
         </div>
         <div class="team-card">
           <div class="team-flag" id="result-flag-weak"></div>
@@ -87,21 +103,14 @@
           <div class="team-label">Wild Card</div>
         </div>
       </div>
-      <p class="good-luck">Good luck with the sweepstakes! Your teams have been recorded. 🎉</p>
+      <p class="good-luck" id="result-good-luck">Good luck with the sweepstakes! Your teams have been recorded. 🎉</p>
+      <p class="share-nudge">Share your result on WhatsApp to keep a record of your teams!</p>
       <div class="share-row">
         <button id="whatsapp-btn" class="btn btn-whatsapp">📲 Share on WhatsApp</button>
         <button id="copy-btn" class="btn btn-copy">Copy</button>
       </div>
       <p id="copy-confirm" class="copy-confirm"></p>
-    </div>
-  </div>
-
-  <!-- Screen: Already spun -->
-  <div id="screen-done" class="screen hidden">
-    <div class="card">
-      <div class="trophy">✅</div>
-      <h2>You've already spun!</h2>
-      <p>Your teams have been recorded. Check your email for confirmation.</p>
+      <button id="back-home-btn" class="btn btn-back">← Back to Home</button>
     </div>
   </div>
 
