@@ -216,6 +216,7 @@ function bindEvents() {
 
   document.getElementById("confirm-btn").addEventListener("click", function () {
     buildReels();
+    document.getElementById("do-spin-btn").disabled = false;
     showScreen("screen-spin");
   });
 

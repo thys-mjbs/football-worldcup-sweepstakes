@@ -100,19 +100,12 @@ function getState() {
 
 // ============================================================
 // POST: claim
-// Finds next unassigned pair atomically using LockService
+// Finds next unassigned pair and records it
 // ============================================================
 
 function claim(data) {
   var name = data.name;
   if (!name) return { success: false, error: "Missing name." };
-
-  var lock = LockService.getScriptLock();
-  try {
-    lock.waitForLock(10000);
-  } catch (e) {
-    return { success: false, error: "Server is busy, please try again in a moment." };
-  }
 
   try {
     var ss = SpreadsheetApp.openByUrl(SHEET_URL);
@@ -178,8 +171,8 @@ function claim(data) {
 
     return { success: true, name: name, team1: team1, team2: team2 };
 
-  } finally {
-    lock.releaseLock();
+  } catch (err) {
+    return { success: false, error: err.message };
   }
 }
 
