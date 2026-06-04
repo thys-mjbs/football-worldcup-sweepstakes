@@ -94,6 +94,13 @@ h2 {
   margin-bottom: 16px;
 }
 
+.tagline {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
 p {
   color: var(--text-muted);
   margin-bottom: 16px;
