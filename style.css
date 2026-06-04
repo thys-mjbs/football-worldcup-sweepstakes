@@ -1,0 +1,413 @@
+/* ============================================================
+   FIFA 2026 Sweepstakes — Mobile-first styles
+   Base breakpoint: 390px (iPhone 14)
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0f0f1a;
+  --surface: #1a1a2e;
+  --surface2: #16213e;
+  --accent: #e94560;
+  --accent2: #0f3460;
+  --text: #eaeaea;
+  --text-muted: #8888a8;
+  --success: #4caf82;
+  --border: #2a2a4a;
+  --radius: 16px;
+  --radius-sm: 8px;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+/* ============================================================
+   Screens
+   ============================================================ */
+
+.screen {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.screen.hidden { display: none; }
+.screen.active { display: flex; }
+
+/* ============================================================
+   Card
+   ============================================================ */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.trophy {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+p {
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+}
+
+/* ============================================================
+   Form
+   ============================================================ */
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+select {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 1rem;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238888a8' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  cursor: pointer;
+  min-height: 48px;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+select option:disabled {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+
+.btn {
+  display: inline-block;
+  padding: 14px 24px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 48px;
+  transition: opacity 0.15s, transform 0.1s;
+  width: 100%;
+  letter-spacing: 0.02em;
+}
+
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) { opacity: 0.9; }
+
+.btn-secondary {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover:not(:disabled) { border-color: var(--accent); }
+
+.btn-large {
+  font-size: 1.15rem;
+  padding: 18px 24px;
+  min-height: 56px;
+  letter-spacing: 0.05em;
+}
+
+.btn-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn-row .btn { width: 50%; }
+
+/* ============================================================
+   Error / Info messages
+   ============================================================ */
+
+.error {
+  color: var(--accent);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  background: rgba(233,69,96,0.1);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(233,69,96,0.3);
+}
+
+.hidden { display: none !important; }
+
+/* ============================================================
+   Confirmation screen
+   ============================================================ */
+
+.confirm-icon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+
+.confirm-warning {
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-bottom: 24px;
+}
+
+/* ============================================================
+   Spinner / Slot machine
+   ============================================================ */
+
+.spinners-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 24px 0;
+}
+
+.spinner-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.spinner-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.spinner-window {
+  width: 100%;
+  height: 120px;
+  border: 2px solid var(--accent);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface2);
+  position: relative;
+}
+
+.spinner-window::before,
+.spinner-window::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 30px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.spinner-window::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--surface2), transparent);
+}
+
+.spinner-window::after {
+  bottom: 0;
+  background: linear-gradient(to top, var(--surface2), transparent);
+}
+
+.reel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  will-change: transform;
+}
+
+.reel-item {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  padding: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: center;
+}
+
+.reel-item.highlight {
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.vs-divider {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  padding-top: 28px;
+}
+
+/* ============================================================
+   Result screen
+   ============================================================ */
+
+.teams-row {
+  display: flex;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.team-card {
+  flex: 1;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.team-card:nth-child(2) { animation-delay: 0.15s; }
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.7); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.team-flag {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.team-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.team-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+}
+
+.good-luck {
+  font-size: 1rem;
+  color: var(--success);
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+/* ============================================================
+   Loading overlay
+   ============================================================ */
+
+.loading {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,15,26,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   Responsive — larger screens
+   ============================================================ */
+
+@media (min-width: 600px) {
+  .card { padding: 40px 36px; }
+  h1 { font-size: 1.75rem; }
+  .team-flag { font-size: 3.5rem; }
+  .team-name { font-size: 0.95rem; }
+  .reel-item { font-size: 0.9rem; }
+}

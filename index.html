@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1a1a2e" />
+  <title>MJB FIFA 2026 Sweepstakes</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Loading overlay -->
+  <div id="loading" class="loading hidden">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Screen 1: Landing -->
+  <div id="screen-landing" class="screen active">
+    <div class="card">
+      <div class="trophy">🏆</div>
+      <h1 id="app-title">MJB FIFA 2026 Sweepstakes</h1>
+      <p id="welcome-message">Select your name from the dropdown below, then spin to reveal your two teams.</p>
+      <div class="form-group">
+        <label for="name-select">Select your name</label>
+        <select id="name-select">
+          <option value="">— choose your name —</option>
+        </select>
+      </div>
+      <p id="error-msg" class="error hidden"></p>
+      <button id="spin-btn" class="btn btn-primary" disabled>Let's Spin!</button>
+    </div>
+  </div>
+
+  <!-- Screen 2: Confirmation modal -->
+  <div id="screen-confirm" class="screen hidden">
+    <div class="card">
+      <div class="confirm-icon">👤</div>
+      <h2>Are you sure?</h2>
+      <p>You selected <strong id="confirm-name"></strong>.</p>
+      <p class="confirm-warning">Make sure this is your name. Once you spin, your teams are locked in and cannot be changed.</p>
+      <div class="btn-row">
+        <button id="goback-btn" class="btn btn-secondary">Go Back</button>
+        <button id="confirm-btn" class="btn btn-primary">Yes, that's me!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 3: Spin -->
+  <div id="screen-spin" class="screen hidden">
+    <div class="card">
+      <h2>Your teams await…</h2>
+      <div class="spinners-row">
+        <div class="spinner-col">
+          <div class="spinner-label">Strong Pick</div>
+          <div class="spinner-window">
+            <div id="reel-strong" class="reel"></div>
+          </div>
+        </div>
+        <div class="vs-divider">VS</div>
+        <div class="spinner-col">
+          <div class="spinner-label">Wild Card</div>
+          <div class="spinner-window">
+            <div id="reel-weak" class="reel"></div>
+          </div>
+        </div>
+      </div>
+      <button id="do-spin-btn" class="btn btn-primary btn-large">🎰 SPIN!</button>
+    </div>
+  </div>
+
+  <!-- Screen 4: Result -->
+  <div id="screen-result" class="screen hidden">
+    <div class="card">
+      <h2>Your Teams Are…</h2>
+      <div class="teams-row">
+        <div class="team-card">
+          <div class="team-flag" id="result-flag-strong"></div>
+          <div class="team-name" id="result-name-strong"></div>
+          <div class="team-label">Strong Pick</div>
+        </div>
+        <div class="team-card">
+          <div class="team-flag" id="result-flag-weak"></div>
+          <div class="team-name" id="result-name-weak"></div>
+          <div class="team-label">Wild Card</div>
+        </div>
+      </div>
+      <p class="good-luck">Good luck with the sweepstakes! Your teams have been recorded. 🎉</p>
+    </div>
+  </div>
+
+  <!-- Screen: Already spun -->
+  <div id="screen-done" class="screen hidden">
+    <div class="card">
+      <div class="trophy">✅</div>
+      <h2>You've already spun!</h2>
+      <p>Your teams have been recorded. Check your email for confirmation.</p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
