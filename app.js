@@ -90,8 +90,36 @@ var selectedName = null;
 // INIT
 // ============================================================
 
+// UPDATE this if the kick-off time changes — this is 21:00 SAST (UTC+2) on June 11 2026
+const KICKOFF = new Date('2026-06-11T19:00:00Z');
+
+function startCountdown() {
+  function tick() {
+    var now = new Date();
+    var diff = KICKOFF - now;
+    var el = document.getElementById("countdown-timer");
+    if (!el) return;
+    if (diff <= 0) {
+      el.innerHTML = '<p style="color:var(--success);font-weight:700;font-size:1rem;">The tournament has kicked off! ⚽</p>';
+      return;
+    }
+    var days  = Math.floor(diff / 86400000);
+    var hours = Math.floor((diff % 86400000) / 3600000);
+    var mins  = Math.floor((diff % 3600000) / 60000);
+    var secs  = Math.floor((diff % 60000) / 1000);
+    document.getElementById("cd-days").textContent  = String(days).padStart(2, "0");
+    document.getElementById("cd-hours").textContent = String(hours).padStart(2, "0");
+    document.getElementById("cd-mins").textContent  = String(mins).padStart(2, "0");
+    document.getElementById("cd-secs").textContent  = String(secs).padStart(2, "0");
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   // Session recovery — show result again if already spun this session
+  startCountdown();
+
   if (sessionStorage.getItem("hasSpun")) {
     var stored = sessionStorage.getItem("spinResult");
     if (stored) {
@@ -106,6 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
+  startCountdown();
   loadState();
   bindEvents();
 });
@@ -193,8 +222,8 @@ function updateLeaderboardToggle(participants) {
   var count = participants.filter(function (p) { return p.claimed; }).length;
   var btn = document.getElementById("leaderboard-toggle");
   var label = count === 0
-    ? "🏆 View Leaderboard (no picks yet)"
-    : "🏆 View Leaderboard (" + count + " of 60 picked)";
+    ? "🏆 View Team Draw Results (no picks yet)"
+    : "🏆 View Team Draw Results (" + count + " of 60 picked)";
   btn.textContent = label;
 }
 
@@ -241,9 +270,9 @@ function bindEvents() {
     // Keep count text, just update the toggle label direction
     var currentText = this.textContent;
     if (isHidden) {
-      this.textContent = currentText.replace("View", "Hide");
+      this.textContent = currentText.replace("View Team Draw Results", "Hide Team Draw Results");
     } else {
-      this.textContent = currentText.replace("Hide", "View");
+      this.textContent = currentText.replace("Hide Team Draw Results", "View Team Draw Results");
     }
   });
 

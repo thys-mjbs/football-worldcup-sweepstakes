@@ -24,6 +24,18 @@
       <h1 id="app-title">DGMC Radiology World Cup Team Draw</h1>
       <p class="tagline">Draw your World Cup team today!</p>
       <p id="welcome-message">Whether you get a tournament favourite or an underdog, support your team all the way to the final and enjoy the exciting competition.<br><br>Great prizes are up for grabs! 🏆</p>
+      <div class="countdown-block">
+        <p class="countdown-label">⏱ First kick-off in</p>
+        <div class="countdown-display" id="countdown-timer">
+          <div class="cd-unit"><span id="cd-days">--</span><span class="cd-lbl">days</span></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span id="cd-hours">--</span><span class="cd-lbl">hrs</span></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span id="cd-mins">--</span><span class="cd-lbl">min</span></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span id="cd-secs">--</span><span class="cd-lbl">sec</span></div>
+        </div>
+      </div>
       <div class="form-group">
         <label for="name-select">Select your name to spin</label>
         <select id="name-select">
@@ -34,10 +46,10 @@
       <button id="spin-btn" class="btn btn-primary" disabled>Let's Spin!</button>
     </div>
 
-    <button id="leaderboard-toggle" class="leaderboard-toggle">🏆 View Leaderboard</button>
+    <button id="leaderboard-toggle" class="leaderboard-toggle">🏆 View Team Draw Results</button>
 
     <div id="leaderboard-panel" class="leaderboard-panel hidden">
-      <h3>Who's got what?</h3>
+      <h3>Team Draw Results</h3>
       <div class="lb-table">
         <div class="lb-row lb-header">
           <span>Main Team</span>
@@ -109,7 +121,7 @@
           <div class="team-label">Wild Card</div>
         </div>
       </div>
-      <p class="good-luck" id="result-good-luck">Good luck with the sweepstakes! Your teams have been recorded. 🎉</p>
+      <p class="good-luck" id="result-good-luck">Teams assigned, names recorded, hopes high! Wishing everyone the best of luck for the tournament.</p>
       <button id="back-home-btn" class="btn btn-back">← Back to Home</button>
     </div>
   </div>
