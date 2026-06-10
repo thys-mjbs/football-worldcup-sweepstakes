@@ -1,3 +1,69 @@
+# ============================================================
+# SENSITIVE FILES — never commit these
+# ============================================================
+
+# Environment / credentials
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.*
+credentials.*
+service-account*.json
+*.secret
+
+# Claude / MCP config files (may contain API keys or tokens)
+.mcp.json
+mcp-config.json
+mcp-settings.json
+.claude/settings.local.json
+.claude/settings.json
+
+# Participant / personal data files
+names.txt
+names.csv
+participants.txt
+participants.csv
+
+# Internal planning / business documents
+context.txt
+*.docx
+*.xlsx
+*.xls
+*.pdf
+*brief*.txt
+*brief*.md
+
+# ============================================================
+# OS / EDITOR NOISE
+# ============================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+
+# JetBrains
+.idea/
+*.iml
+
+# ============================================================
+# NODE / TOOLING (from GitHub Node template — kept for safety
+# in case tooling is added later)
+# ============================================================
+
 # Logs
 logs
 *.log
