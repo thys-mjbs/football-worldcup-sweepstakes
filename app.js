@@ -42,7 +42,7 @@ const WEAK_TEAMS = [
   "Cabo Verde", "Panama", "Qatar", "Saudi Arabia", "South Africa",
   "Ghana", "Tunisia", "Algeria", "Egypt", "Congo DR",
   "Bosnia and Herzegovina", "Australia", "Paraguay", "Ecuador",
-  "Canada", "Iran", "Scotland", "Czechia", "Cameroon"
+  "Canada", "Iran", "Scotland", "Czechia", "Iraq"
 ];
 
 // ============================================================
@@ -97,7 +97,7 @@ const TEAM_FLAGS = {
   "Iran":                   "🇮🇷",
   "Scotland":               "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
   "Czechia":                "🇨🇿",
-  "Cameroon":               "🇨🇲"
+  "Iraq":                   "🇮🇶"
 };
 
 // ============================================================

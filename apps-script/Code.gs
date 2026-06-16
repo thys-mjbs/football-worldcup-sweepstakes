@@ -19,7 +19,7 @@ var WEAK_TEAMS = [
   "Cabo Verde", "Panama", "Qatar", "Saudi Arabia", "South Africa",
   "Ghana", "Tunisia", "Algeria", "Egypt", "Congo DR",
   "Bosnia and Herzegovina", "Australia", "Paraguay", "Ecuador", "Canada",
-  "Iran", "Scotland", "Czechia", "Cameroon"
+  "Iran", "Scotland", "Czechia", "Iraq"
 ];
 
 // ============================================================
@@ -256,6 +256,53 @@ function sendEmail(name, team1, team2, timestamp) {
 }
 
 // ============================================================
+// FIX — run once manually, never again
+// Cameroon did not qualify for the 2026 World Cup; Iraq did.
+// Renames the team text in already-recorded cells without touching
+// who was allocated which pair.
+// ============================================================
+
+function fixCameroonToIraq() {
+  var ss = SpreadsheetApp.openByUrl(SHEET_URL);
+  var changed = 0;
+
+  var partSheet = ss.getSheetByName("Participants");
+  var partData = partSheet.getDataRange().getValues();
+  for (var i = 1; i < partData.length; i++) {
+    for (var col = 3; col <= 4; col++) { // team1, team2
+      if (partData[i][col] === "Cameroon") {
+        partSheet.getRange(i + 1, col + 1).setValue("Iraq");
+        changed++;
+      }
+    }
+  }
+
+  var poolSheet = ss.getSheetByName("TeamPool");
+  var poolData = poolSheet.getDataRange().getValues();
+  for (var j = 1; j < poolData.length; j++) {
+    for (var col2 = 1; col2 <= 2; col2++) { // team1, team2
+      if (poolData[j][col2] === "Cameroon") {
+        poolSheet.getRange(j + 1, col2 + 1).setValue("Iraq");
+        changed++;
+      }
+    }
+  }
+
+  var logSheet = ss.getSheetByName("AdminLog");
+  var logData = logSheet.getDataRange().getValues();
+  for (var k = 1; k < logData.length; k++) {
+    for (var col3 = 2; col3 <= 3; col3++) { // team1, team2
+      if (logData[k][col3] === "Cameroon") {
+        logSheet.getRange(k + 1, col3 + 1).setValue("Iraq");
+        changed++;
+      }
+    }
+  }
+
+  Logger.log("Replaced " + changed + " Cameroon cell(s) with Iraq.");
+}
+
+// ============================================================
 // SEED — run once manually, never again
 // ============================================================
 
@@ -277,9 +324,9 @@ function seedTeamPool() {
     ["Senegal",       "Bosnia and Herzegovina"],
     ["Brazil",        "Cabo Verde"],
     ["Côte d'Ivoire", "Cabo Verde"],
-    ["Croatia",       "Cameroon"],
-    ["Morocco",       "Cameroon"],
-    ["Spain",         "Cameroon"],
+    ["Croatia",       "Iraq"],
+    ["Morocco",       "Iraq"],
+    ["Spain",         "Iraq"],
     ["Austria",       "Canada"],
     ["Norway",        "Canada"],
     ["South Korea",   "Congo DR"],

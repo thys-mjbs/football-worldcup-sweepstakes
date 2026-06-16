@@ -131,7 +131,7 @@ All of this is done in the Apps Script editor (browser).
 Argentina, Brazil, France, Spain, England, Germany, Portugal, Netherlands, Belgium, Croatia, Uruguay, Morocco, Colombia, Switzerland, Mexico, United States, Japan, South Korea, Senegal, Norway, Sweden, Austria, Türkiye, Côte d'Ivoire
 
 ### Weak / Underdog Teams (24)
-Jordan, Uzbekistan, Curaçao, Haiti, New Zealand, Cabo Verde, Panama, Qatar, Saudi Arabia, South Africa, Ghana, Tunisia, Algeria, Egypt, Congo DR, Bosnia and Herzegovina, Australia, Paraguay, Ecuador, Canada, Iran, Scotland, Czechia, Cameroon
+Jordan, Uzbekistan, Curaçao, Haiti, New Zealand, Cabo Verde, Panama, Qatar, Saudi Arabia, South Africa, Ghana, Tunisia, Algeria, Egypt, Congo DR, Bosnia and Herzegovina, Australia, Paraguay, Ecuador, Canada, Iran, Scotland, Czechia, Iraq
 
 ### Participants (60)
 Danae, Liza, Mandy, Cherne, Elrentia, Thobeka, Nhlanhla, Thandekile, Martene, Claire, Sithembile, Yasmeen, Carina, Macdonald, Monare, Akleema, Samantha, Mamasita, Yogita, Miyelani, Constance, Mpho, Mpumzi, Gugu, Gail, Itumeleng, Thomas, Blandina, Refilwe, Robert, Shadrack, Nadia, Tamzin, Prescious, Kenneth, Landiwe, Veli, Ntombizodwa, Victor, Michael, Tshilisanani, Yerisha, Hajra, Lusanda, Dedre, Ellenor, Humayra, Zanele, Marcelle, Prof Sanyika, Dr Cantrell, Dr Omar, Dr Singh, Dr Brachmayer, Dr Daya, Dr Poyiadji, Dr Oren, Dr Terreblanche, Dane, Marizanne
