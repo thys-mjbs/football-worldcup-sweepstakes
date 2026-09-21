@@ -6,6 +6,10 @@
 var SHEET_URL = "https://docs.google.com/spreadsheets/d/14GDJ_PExypWCbei0xAsmiIGNTVw1MdrzM-bdYlpi1mA/";
 var ADMIN_KEY = "sweepstakes-admin-2026";
 
+// OFFLINE KILL SWITCH: while true, every web request (doGet/doPost) is refused
+// and no sheet data is read or written. Set to false and redeploy to go live again.
+var SITE_OFFLINE = true;
+
 var STRONG_TEAMS = [
   "Argentina", "Brazil", "France", "Spain", "England",
   "Germany", "Portugal", "Netherlands", "Belgium", "Croatia",
@@ -26,7 +30,14 @@ var WEAK_TEAMS = [
 // ROUTING
 // ============================================================
 
+function offlineResponse() {
+  return ContentService
+    .createTextOutput(JSON.stringify({ success: false, error: "Offline." }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
 function doGet(e) {
+  if (SITE_OFFLINE) return offlineResponse();
   var action = e.parameter.action;
   var result;
   try {
@@ -44,6 +55,7 @@ function doGet(e) {
 }
 
 function doPost(e) {
+  if (SITE_OFFLINE) return offlineResponse();
   var data;
   var result;
   try {

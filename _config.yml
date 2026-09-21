@@ -1,0 +1,13 @@
+# Site is OFFLINE (see OFFLINE.md). Only index.html and 404.html are published.
+# Everything else stays in the repo but is not served by GitHub Pages.
+exclude:
+  - _archive
+  - README.md
+  - OFFLINE.md
+  - LICENSE
+  - BUILD_PLAN.md
+  - apps-script
+  - app.js
+  - style.css
+  - DGMC_Logo.png
+  - favicon.svg
